@@ -1,0 +1,37 @@
+@mixin border-radius() {
+	border-radius: 5px;
+}
+
+@mixin transition($property) {
+	transition: $property 250ms ease;
+}
+
+$veryLightGrey:	#ddd
+$lightGrey:		#999
+$grey:		 	#666
+$darkGrey:		#333
+
+$mammals:	#ef6930;
+$birds:		#9db58f;
+$amphibians:#687a94;
+$insects:	#e5ae5a;
+
+.status-message {
+	border: 1px solid #c00;
+	background: #fac7c7;
+	padding: 10px;
+}
+
+.outer-wrapper {
+	width: 100%;
+	min-height: 900px;
+	position: relative;
+	border: 1px solid #c8c7cf;
+
+	h2,h3,p {
+		padding: 10px 10px 0 10px;
+		margin: 0;
+	}
+
+} // outerwrapper
+
