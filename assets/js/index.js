@@ -19,6 +19,9 @@
 					$("li").addClass("inactive");
 				});
 
+				// TO DO ADD LEFT RIGHT to tool tips
+				// $("li").eq(300).position().left;
+
 			});
 
 		/* End of active code */

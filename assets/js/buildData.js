@@ -15,6 +15,7 @@ function buildData (data) {
 			myObject.names = data[i].species;
 		}
 		myObject.name = myObject.names.split(',')[0].split('|')[0];
+		myObject.name = capitaliseFirstLetter(myObject.name);
 		
 		updatedData.push(myObject);
 	}
@@ -31,4 +32,9 @@ function compareClass(a,b) {
 	if (a.class > b.class)
 		return -1;
 	return 0;
+}
+
+function capitaliseFirstLetter(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
