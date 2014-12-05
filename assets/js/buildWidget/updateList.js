@@ -12,7 +12,6 @@ BuildWidget.prototype.updateList = function() {
 		.select("ul")
 		.selectAll("li")
 		.classed("visible", function (d) {
-			// console.log(d.status);
 			if (selectedStates.indexOf(d.status) === -1 ) {
 				return false;
 			} else {

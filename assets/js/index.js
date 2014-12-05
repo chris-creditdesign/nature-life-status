@@ -10,15 +10,16 @@
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
 				lfStGraphic.buildCheckboxes("#states");
+				lfStGraphic.updateNumbers();
 
 
 				$(".outer-wrapper .chart li").on("mouseover", function() {
-					$("li").addClass("inactive");
+					$(".outer-wrapper .chart li").addClass("inactive");
 					$(this).removeClass("inactive");
 				});
 
 				$(".outer-wrapper .chart ul").on("mouseleave", function () {
-					$("li").addClass("inactive");
+					$(".outer-wrapper .chart li").addClass("inactive");
 				});
 
 				// TO DO ADD LEFT RIGHT to tool tips
@@ -29,6 +30,7 @@
 					// var thisVal = $(this).val();
 
 					lfStGraphic.updateList();
+					lfStGraphic.updateNumbers();
 				});
 
 			});

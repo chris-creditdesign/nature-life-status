@@ -64,6 +64,35 @@
   padding: 10px 10px 0 10px;
   margin: 0;
 }
+.outer-wrapper .key {
+  padding: 10px 10px 0 10px;
+  margin: 0;
+}
+.outer-wrapper .key .breakdown {
+  margin-left: 17px;
+}
+.outer-wrapper .key .breakdown li {
+  list-style: disc;
+}
+.outer-wrapper .key .number {
+  font-weight: bold;
+}
+.outer-wrapper .key .list-unit {
+  font-size: 0.8em;
+  color: #666666;
+}
+.outer-wrapper .key .mammals {
+  color: #ef6930;
+}
+.outer-wrapper .key .birds {
+  color: #9db58f;
+}
+.outer-wrapper .key .amphibians {
+  color: #687a94;
+}
+.outer-wrapper .key .insects {
+  color: #e5ae5a;
+}
 .outer-wrapper .chart ul {
   list-style: none;
   margin: 0;
@@ -136,7 +165,7 @@
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;
-  padding: 10px;
+  padding: 10px 0 0 0;
   overflow: hidden;
 }
 .outer-wrapper .options ul {
@@ -148,6 +177,7 @@
   list-style: none;
   padding: 0 0 0 10px;
   margin: 4px 0px 8px;
+  display: inline-block;
 }
 .outer-wrapper .options input[type="checkbox"] {
   border-radius: 50%;
@@ -185,8 +215,21 @@
 
 </style>
 <div class="outer-wrapper">
-
+	<h2>Headline</h2>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente harum quibusdam, quidem placeat. Praesentium sapiente unde architecto impedit nesciunt numquam provident. Tempore consequuntur delectus minima id! Explicabo error modi suscipit.</p>
+	
 	<form class="options" id="states"></form>
+
+	<h3>Displaying: </h3>
+	<ul class="key">
+		<li>Total: <span id="total-number" class="number"></span> <span class="list-unit">THREATENED MAMMALS, BIRDS, AMPHIBIANS AND INSECTS</span></li>
+		<ul class="breakdown">
+			<li>Mammals: <span id="mammals-number" class="mammals number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
+			<li>Insects: <span id="insects-number" class="insects number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
+			<li>Birds: <span id="birds-number" class="birds number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
+			<li>Amphibians: <span id="amphibians-number" class="amphibians number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
+		</ul>
+	</ul>
 
 	<div class="chart" id="life-status-chart"></div>
 </div>
@@ -215,6 +258,8 @@ function buildParams () {
 	};
 
 	params.key = {};
+
+	params.format = d3.format("0,000");
 
 	return params;
 }
@@ -347,7 +392,6 @@ BuildWidget.prototype.updateList = function() {
 		.select("ul")
 		.selectAll("li")
 		.classed("visible", function (d) {
-			// console.log(d.status);
 			if (selectedStates.indexOf(d.status) === -1 ) {
 				return false;
 			} else {
@@ -356,6 +400,22 @@ BuildWidget.prototype.updateList = function() {
 		});
 
 };
+BuildWidget.prototype.updateNumbers = function() {
+	console.log("I'm updating those numbers");
+	var totalNumber = d3.selectAll('.outer-wrapper .chart li.visible');
+
+	var mammalsNumber = d3.selectAll('.outer-wrapper .chart li.mammals.visible');
+	var birdsNumber = d3.selectAll('.outer-wrapper .chart li.birds.visible'); 
+	var amphibiansNumber = d3.selectAll('.outer-wrapper .chart li.amphibians.visible');
+	var insectsNumber = d3.selectAll('.outer-wrapper .chart li.insects.visible');
+
+	d3.select("#total-number").text(this.params.format(totalNumber[0].length));
+	d3.select("#mammals-number").text(this.params.format(mammalsNumber[0].length));
+	d3.select("#birds-number").text(this.params.format(birdsNumber[0].length));
+	d3.select("#amphibians-number").text(this.params.format(amphibiansNumber[0].length));
+	d3.select("#insects-number").text(this.params.format(insectsNumber[0].length));
+};
+
 (function() {
 		var init = function($)
 		{
@@ -368,15 +428,16 @@ BuildWidget.prototype.updateList = function() {
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
 				lfStGraphic.buildCheckboxes("#states");
+				lfStGraphic.updateNumbers();
 
 
 				$(".outer-wrapper .chart li").on("mouseover", function() {
-					$("li").addClass("inactive");
+					$(".outer-wrapper .chart li").addClass("inactive");
 					$(this).removeClass("inactive");
 				});
 
 				$(".outer-wrapper .chart ul").on("mouseleave", function () {
-					$("li").addClass("inactive");
+					$(".outer-wrapper .chart li").addClass("inactive");
 				});
 
 				// TO DO ADD LEFT RIGHT to tool tips
@@ -387,6 +448,7 @@ BuildWidget.prototype.updateList = function() {
 					// var thisVal = $(this).val();
 
 					lfStGraphic.updateList();
+					lfStGraphic.updateNumbers();
 				});
 
 			});

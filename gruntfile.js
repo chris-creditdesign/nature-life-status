@@ -49,6 +49,7 @@ module.exports = function(grunt){
 						'assets/js/buildWidget/buildList.js',
 						'assets/js/buildWidget/buildCheckboxes.js',
 						'assets/js/buildWidget/updateList.js',
+						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
 						'assets/concat/polopoly-footer.html'
@@ -68,6 +69,7 @@ module.exports = function(grunt){
 						'assets/js/buildWidget/buildList.js',
 						'assets/js/buildWidget/buildCheckboxes.js',
 						'assets/js/buildWidget/updateList.js',
+						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
 						],

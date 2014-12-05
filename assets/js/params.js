@@ -22,5 +22,7 @@ function buildParams () {
 
 	params.key = {};
 
+	params.format = d3.format("0,000");
+
 	return params;
 }
