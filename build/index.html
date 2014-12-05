@@ -324,9 +324,7 @@ BuildWidget.prototype.buildList = function() {
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
-		.data(this.data.data, function (d) {
-			return d.names;
-		})
+		.data(this.data.data)
 		.enter()
 	  .append("li")
 		.attr("class", function (d) {
@@ -401,7 +399,6 @@ BuildWidget.prototype.updateList = function() {
 
 };
 BuildWidget.prototype.updateNumbers = function() {
-	console.log("I'm updating those numbers");
 	var totalNumber = d3.selectAll('.outer-wrapper .chart li.visible');
 
 	var mammalsNumber = d3.selectAll('.outer-wrapper .chart li.mammals.visible');

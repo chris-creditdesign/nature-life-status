@@ -1,5 +1,4 @@
 BuildWidget.prototype.updateNumbers = function() {
-	console.log("I'm updating those numbers");
 	var totalNumber = d3.selectAll('.outer-wrapper .chart li.visible');
 
 	var mammalsNumber = d3.selectAll('.outer-wrapper .chart li.mammals.visible');

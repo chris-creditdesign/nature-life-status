@@ -3,9 +3,7 @@ BuildWidget.prototype.buildList = function() {
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
-		.data(this.data.data, function (d) {
-			return d.names;
-		})
+		.data(this.data.data)
 		.enter()
 	  .append("li")
 		.attr("class", function (d) {
