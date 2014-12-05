@@ -12,17 +12,24 @@
 				lfStGraphic.buildCheckboxes("#states");
 
 
-				$("li").on("mouseover", function() {
+				$(".outer-wrapper .chart li").on("mouseover", function() {
 					$("li").addClass("inactive");
 					$(this).removeClass("inactive");
 				});
 
-				$("ul").on("mouseleave", function () {
+				$(".outer-wrapper .chart ul").on("mouseleave", function () {
 					$("li").addClass("inactive");
 				});
 
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
+
+				$(".outer-wrapper .options input").change(function () {
+					// var thisProp = $(this).prop("checked");
+					// var thisVal = $(this).val();
+
+					lfStGraphic.updateList();
+				});
 
 			});
 

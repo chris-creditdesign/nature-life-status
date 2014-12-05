@@ -3,7 +3,9 @@ BuildWidget.prototype.buildList = function() {
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
-		.data(this.data.data)
+		.data(this.data.data, function (d) {
+			return d.names;
+		})
 		.enter()
 	  .append("li")
 		.attr("class", function (d) {
@@ -25,6 +27,7 @@ BuildWidget.prototype.buildList = function() {
 			}
 		})
 		.classed("inactive", true)
+		.classed("visible", true)
 		.html(function (d) {
 			return "<p>" + d.name + "</p>";
 		});

@@ -15,7 +15,7 @@
 	<link rel="stylesheet" type="text/css" href="polopoly/news-main.css" />	
 	<link rel="stylesheet" type="text/css" href="polopoly/comments.css" />	
 	<link rel="stylesheet" type="text/css" href="polopoly/mobile.css" />	
-
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.2,user-scalable=yes"/>
 
 
 </head>
@@ -72,12 +72,18 @@
 }
 .outer-wrapper .chart li {
   border-radius: 5px;
+  -webkit-transition: opacity 400ms ease;
+          transition: opacity 400ms ease;
   display: inline-block;
   position: relative;
   width: 10px;
   height: 10px;
-  cursor: pointer;
   margin: 1px;
+  opacity: 0;
+}
+.outer-wrapper .chart .visible {
+  opacity: 1;
+  cursor: pointer;
 }
 .outer-wrapper .chart li > p {
   border-radius: 5px;
@@ -130,7 +136,6 @@
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;
-  background-color: #ddd;
   padding: 10px;
   overflow: hidden;
 }
@@ -274,7 +279,9 @@ BuildWidget.prototype.buildList = function() {
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
-		.data(this.data.data)
+		.data(this.data.data, function (d) {
+			return d.names;
+		})
 		.enter()
 	  .append("li")
 		.attr("class", function (d) {
@@ -296,6 +303,7 @@ BuildWidget.prototype.buildList = function() {
 			}
 		})
 		.classed("inactive", true)
+		.classed("visible", true)
 		.html(function (d) {
 			return "<p>" + d.name + "</p>";
 		});
@@ -325,6 +333,29 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 			return innerHTML;
 		});
 };
+BuildWidget.prototype.updateList = function() {
+	var self = this;
+	var selectedStates = [];
+
+	var checkboxesState = jQuery('.outer-wrapper .options input:checked');
+
+	for (var i = 0; i < checkboxesState.length; i++) {
+		selectedStates.push(checkboxesState.eq(i).val());
+	};
+
+	d3.select(this.target)
+		.select("ul")
+		.selectAll("li")
+		.classed("visible", function (d) {
+			// console.log(d.status);
+			if (selectedStates.indexOf(d.status) === -1 ) {
+				return false;
+			} else {
+				return true;
+			}
+		});
+
+};
 (function() {
 		var init = function($)
 		{
@@ -339,17 +370,24 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 				lfStGraphic.buildCheckboxes("#states");
 
 
-				$("li").on("mouseover", function() {
+				$(".outer-wrapper .chart li").on("mouseover", function() {
 					$("li").addClass("inactive");
 					$(this).removeClass("inactive");
 				});
 
-				$("ul").on("mouseleave", function () {
+				$(".outer-wrapper .chart ul").on("mouseleave", function () {
 					$("li").addClass("inactive");
 				});
 
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
+
+				$(".outer-wrapper .options input").change(function () {
+					// var thisProp = $(this).prop("checked");
+					// var thisVal = $(this).val();
+
+					lfStGraphic.updateList();
+				});
 
 			});
 

@@ -22,12 +22,18 @@
 }
 .outer-wrapper .chart li {
   border-radius: 5px;
+  -webkit-transition: opacity 400ms ease;
+          transition: opacity 400ms ease;
   display: inline-block;
   position: relative;
   width: 10px;
   height: 10px;
-  cursor: pointer;
   margin: 1px;
+  opacity: 0;
+}
+.outer-wrapper .chart .visible {
+  opacity: 1;
+  cursor: pointer;
 }
 .outer-wrapper .chart li > p {
   border-radius: 5px;
@@ -80,7 +86,6 @@
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;
-  background-color: #ddd;
   padding: 10px;
   overflow: hidden;
 }
