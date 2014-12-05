@@ -8,6 +8,16 @@
 			).done(function () {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), data);
+				lfStGraphic.buildList();
+
+				$("li").on("mouseover", function() {
+					$("li").addClass("inactive");
+					$(this).removeClass("inactive");
+				});
+
+				$("ul").on("mouseleave", function () {
+					$("li").addClass("inactive");
+				});
 
 			});
 

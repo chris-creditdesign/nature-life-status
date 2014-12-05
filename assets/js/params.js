@@ -2,9 +2,9 @@ function buildParams () {
 	var params = {};
 
 	params.colour =  [	"#ef6930", // mammals
-						"#9db58f", //birds
+						"#9db58f", // birds
 						"#687a94", // amphibians
-						"#e5ae5a" // insects
+						"#e5ae5a" //  insects
 					];
 
 	params.uiColour = {
