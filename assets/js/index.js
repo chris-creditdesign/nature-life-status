@@ -7,7 +7,7 @@
 				$.getScript("data/threatened_species_data.js")
 			).done(function () {
 
-				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), data);
+				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
 
 				$("li").on("mouseover", function() {

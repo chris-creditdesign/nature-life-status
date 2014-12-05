@@ -1,5 +1,5 @@
 BuildWidget.prototype.buildList = function() {
-	
+
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
@@ -27,6 +27,6 @@ BuildWidget.prototype.buildList = function() {
 		.classed("inactive", true)
 	  .append("p")
 		.text(function (d) {
-			return d.common_names;
+			return d.name;
 		});
 };

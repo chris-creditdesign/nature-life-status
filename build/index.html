@@ -153,7 +153,40 @@ function buildParams () {
 	return params;
 }
 
-// buildData
+function buildData (data) {
+	var updatedData = [];
+
+	for (var i = 0; i < data.length; i++) {
+		var myObject = {};
+
+		myObject.class = data[i].class;
+		myObject.status = data[i].status;
+
+		if (data[i].common_names !== "") {
+			myObject.names = data[i].common_names;
+		} else if (data[i].synonyms !== "") {
+			myObject.names = data[i].synonyms;
+		} else {
+			myObject.names = data[i].species;
+		}
+		myObject.name = myObject.names.split(',')[0].split('|')[0];
+		
+		updatedData.push(myObject);
+	}
+
+	updatedData.sort(compareClass);
+
+	return updatedData;
+}
+
+/*	Function to sort papers by citation */
+function compareClass(a,b) {
+	if (a.class < b.class)
+		return 1;
+	if (a.class > b.class)
+		return -1;
+	return 0;
+}
 function BuildWidget (target, params, data) {
 	this.target = target;
 	this.params = params;
@@ -161,7 +194,7 @@ function BuildWidget (target, params, data) {
 }
 
 BuildWidget.prototype.buildList = function() {
-	
+
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
@@ -189,7 +222,7 @@ BuildWidget.prototype.buildList = function() {
 		.classed("inactive", true)
 	  .append("p")
 		.text(function (d) {
-			return d.common_names;
+			return d.name;
 		});
 };
 
@@ -202,7 +235,7 @@ BuildWidget.prototype.buildList = function() {
 				$.getScript("data/threatened_species_data.js")
 			).done(function () {
 
-				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), data);
+				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
 
 				$("li").on("mouseover", function() {
