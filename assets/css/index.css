@@ -43,6 +43,10 @@
   pointer-events: none;
   line-height: 1.3em;
   box-shadow: 2px 2px 5px #666666;
+  -webkit-hyphens: auto;
+     -moz-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
 }
 .outer-wrapper li > p:before {
   content: "";

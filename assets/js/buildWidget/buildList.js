@@ -25,8 +25,7 @@ BuildWidget.prototype.buildList = function() {
 			}
 		})
 		.classed("inactive", true)
-	  .append("p")
-		.text(function (d) {
-			return d.name;
+		.html(function (d) {
+			return "<p>" + d.name + "</p>";
 		});
 };

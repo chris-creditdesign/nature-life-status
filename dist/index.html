@@ -44,6 +44,10 @@
   pointer-events: none;
   line-height: 1.3em;
   box-shadow: 2px 2px 5px #666666;
+  -webkit-hyphens: auto;
+     -moz-hyphens: auto;
+      -ms-hyphens: auto;
+          hyphens: auto;
 }
 .outer-wrapper li > p:before {
   content: "";
@@ -171,9 +175,8 @@ BuildWidget.prototype.buildList = function() {
 			}
 		})
 		.classed("inactive", true)
-	  .append("p")
-		.text(function (d) {
-			return d.name;
+		.html(function (d) {
+			return "<p>" + d.name + "</p>";
 		});
 };
 
