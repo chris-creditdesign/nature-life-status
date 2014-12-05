@@ -14,13 +14,13 @@
   padding: 10px 10px 0 10px;
   margin: 0;
 }
-.outer-wrapper ul {
+.outer-wrapper .chart ul {
   list-style: none;
   margin: 0;
   padding: 0;
   line-height: 11px;
 }
-.outer-wrapper li {
+.outer-wrapper .chart li {
   border-radius: 5px;
   display: inline-block;
   position: relative;
@@ -29,7 +29,7 @@
   cursor: pointer;
   margin: 1px;
 }
-.outer-wrapper li > p {
+.outer-wrapper .chart li > p {
   border-radius: 5px;
   position: absolute;
   background-color: #333;
@@ -48,7 +48,7 @@
       -ms-hyphens: auto;
           hyphens: auto;
 }
-.outer-wrapper li > p:before {
+.outer-wrapper .chart li > p:before {
   content: "";
   position: absolute;
   top: -8px;
@@ -59,21 +59,71 @@
   border-top: 0;
   opacity: 1;
 }
-.outer-wrapper .inactive > p {
+.outer-wrapper .chart .inactive > p {
   display: none;
 }
-.outer-wrapper .mammals {
+.outer-wrapper .chart .mammals {
   background-color: #ef6930;
 }
-.outer-wrapper .birds {
+.outer-wrapper .chart .birds {
   background-color: #9db58f;
 }
-.outer-wrapper .amphibians {
+.outer-wrapper .chart .amphibians {
   background-color: #687a94;
 }
-.outer-wrapper .insects {
+.outer-wrapper .chart .insects {
   background-color: #e5ae5a;
 }
-.outer-wrapper .null {
+.outer-wrapper .chart .null {
   background-color: #dddddd;
+}
+.outer-wrapper .options {
+  -webkit-transition: opacity 0.4s ease;
+  transition: opacity 0.4s ease;
+  background-color: #ddd;
+  padding: 10px;
+  overflow: hidden;
+}
+.outer-wrapper .options ul {
+  overflow: visible;
+  padding-left: 0px;
+  margin: 0;
+}
+.outer-wrapper .options ul li {
+  list-style: none;
+  padding: 0 0 0 10px;
+  margin: 4px 0px 8px;
+}
+.outer-wrapper .options input[type="checkbox"] {
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin-right: 5px;
+  position: relative;
+  width: 20px;
+  background-color: #666;
+  -webkit-appearance: none;
+}
+.outer-wrapper .options input[type="checkbox"]:after {
+  content: "\2714";
+  font-size: 1em;
+  display: inline-block;
+  left: 0.3em;
+  position: relative;
+  top: 0.15em;
+}
+.outer-wrapper .options input[type="checkbox"]:after {
+  color: #666;
+}
+.outer-wrapper .options input[type="checkbox"]:checked:after {
+  color: #fff;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .outer-wrapper .options input[type="checkbox"]:after {
+    font-size: 1.3em;
+    left: 0;
+    top: -0.3em;
+    border: none;
+  }
 }

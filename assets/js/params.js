@@ -7,6 +7,12 @@ function buildParams () {
 						"#e5ae5a" //  insects
 					];
 
+	params.species = [	"mammals",
+						"birds",
+						"amphibians",
+						"insects"
+					];
+
 	params.uiColour = {
 		veryLightGrey: "#ddd",
 		lightGrey: "#999",

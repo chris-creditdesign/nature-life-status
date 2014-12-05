@@ -9,6 +9,8 @@
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
+				lfStGraphic.buildCheckboxes("#states");
+
 
 				$("li").on("mouseover", function() {
 					$("li").addClass("inactive");

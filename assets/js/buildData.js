@@ -1,5 +1,6 @@
 function buildData (data) {
 	var updatedData = [];
+	var statesArray = [];
 
 	for (var i = 0; i < data.length; i++) {
 		var myObject = {};
@@ -18,11 +19,18 @@ function buildData (data) {
 		myObject.name = capitaliseFirstLetter(myObject.name);
 		
 		updatedData.push(myObject);
+
+		if (statesArray.indexOf(data[i].status) === -1) {
+			statesArray.push(data[i].status);
+		}
 	}
 
 	updatedData.sort(compareClass);
 
-	return updatedData;
+	return {
+		data: updatedData,
+		status: statesArray
+	};
 }
 
 /*	Function to sort papers by citation */

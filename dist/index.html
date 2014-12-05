@@ -15,13 +15,13 @@
   padding: 10px 10px 0 10px;
   margin: 0;
 }
-.outer-wrapper ul {
+.outer-wrapper .chart ul {
   list-style: none;
   margin: 0;
   padding: 0;
   line-height: 11px;
 }
-.outer-wrapper li {
+.outer-wrapper .chart li {
   border-radius: 5px;
   display: inline-block;
   position: relative;
@@ -30,7 +30,7 @@
   cursor: pointer;
   margin: 1px;
 }
-.outer-wrapper li > p {
+.outer-wrapper .chart li > p {
   border-radius: 5px;
   position: absolute;
   background-color: #333;
@@ -49,7 +49,7 @@
       -ms-hyphens: auto;
           hyphens: auto;
 }
-.outer-wrapper li > p:before {
+.outer-wrapper .chart li > p:before {
   content: "";
   position: absolute;
   top: -8px;
@@ -60,30 +60,81 @@
   border-top: 0;
   opacity: 1;
 }
-.outer-wrapper .inactive > p {
+.outer-wrapper .chart .inactive > p {
   display: none;
 }
-.outer-wrapper .mammals {
+.outer-wrapper .chart .mammals {
   background-color: #ef6930;
 }
-.outer-wrapper .birds {
+.outer-wrapper .chart .birds {
   background-color: #9db58f;
 }
-.outer-wrapper .amphibians {
+.outer-wrapper .chart .amphibians {
   background-color: #687a94;
 }
-.outer-wrapper .insects {
+.outer-wrapper .chart .insects {
   background-color: #e5ae5a;
 }
-.outer-wrapper .null {
+.outer-wrapper .chart .null {
   background-color: #dddddd;
+}
+.outer-wrapper .options {
+  -webkit-transition: opacity 0.4s ease;
+  transition: opacity 0.4s ease;
+  background-color: #ddd;
+  padding: 10px;
+  overflow: hidden;
+}
+.outer-wrapper .options ul {
+  overflow: visible;
+  padding-left: 0px;
+  margin: 0;
+}
+.outer-wrapper .options ul li {
+  list-style: none;
+  padding: 0 0 0 10px;
+  margin: 4px 0px 8px;
+}
+.outer-wrapper .options input[type="checkbox"] {
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin-right: 5px;
+  position: relative;
+  width: 20px;
+  background-color: #666;
+  -webkit-appearance: none;
+}
+.outer-wrapper .options input[type="checkbox"]:after {
+  content: "\2714";
+  font-size: 1em;
+  display: inline-block;
+  left: 0.3em;
+  position: relative;
+  top: 0.15em;
+}
+.outer-wrapper .options input[type="checkbox"]:after {
+  color: #666;
+}
+.outer-wrapper .options input[type="checkbox"]:checked:after {
+  color: #fff;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .outer-wrapper .options input[type="checkbox"]:after {
+    font-size: 1.3em;
+    left: 0;
+    top: -0.3em;
+    border: none;
+  }
 }
 
 </style>
 <div class="outer-wrapper">
-	<div id="life-status-chart">
-	
-	</div>
+
+	<form class="options" id="states"></form>
+
+	<div class="chart" id="life-status-chart"></div>
 </div>
 <!--[if gt IE 8]><!-->
 <script type="text/javascript">
@@ -94,6 +145,12 @@ function buildParams () {
 						"#9db58f", // birds
 						"#687a94", // amphibians
 						"#e5ae5a" //  insects
+					];
+
+	params.species = [	"mammals",
+						"birds",
+						"amphibians",
+						"insects"
 					];
 
 	params.uiColour = {
@@ -110,6 +167,7 @@ function buildParams () {
 
 function buildData (data) {
 	var updatedData = [];
+	var statesArray = [];
 
 	for (var i = 0; i < data.length; i++) {
 		var myObject = {};
@@ -128,11 +186,18 @@ function buildData (data) {
 		myObject.name = capitaliseFirstLetter(myObject.name);
 		
 		updatedData.push(myObject);
+
+		if (statesArray.indexOf(data[i].status) === -1) {
+			statesArray.push(data[i].status);
+		}
 	}
 
 	updatedData.sort(compareClass);
 
-	return updatedData;
+	return {
+		data: updatedData,
+		status: statesArray
+	};
 }
 
 /*	Function to sort papers by citation */
@@ -160,7 +225,7 @@ BuildWidget.prototype.buildList = function() {
 	d3.select(this.target)
 	  .append("ul")
 		.selectAll("li")
-		.data(this.data)
+		.data(this.data.data)
 		.enter()
 	  .append("li")
 		.attr("class", function (d) {
@@ -187,6 +252,30 @@ BuildWidget.prototype.buildList = function() {
 		});
 };
 
+BuildWidget.prototype.buildCheckboxes = function (target) {
+	
+	/* Create checkboxes for each site */
+	d3.select(target)
+		.append("ul")
+		.selectAll('li')
+	  .data(this.data.status)
+	  	.enter()
+		.append("li")
+		.html(function (d, i) {
+			var checked = "checked";
+			var safeName = d.split('_');
+			
+			for (var i = 0; i < safeName.length; i++) {
+				safeName[i] = capitaliseFirstLetter(safeName[i]);
+			};
+
+			safeName = safeName.join(" ");
+
+			var innerHTML = "<label ><input type='checkbox' value='" + d + "' " + checked + "> " + safeName + "</label>";
+
+			return innerHTML;
+		});
+};
 (function() {
 		var init = function($)
 		{
@@ -198,6 +287,8 @@ BuildWidget.prototype.buildList = function() {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				lfStGraphic.buildList();
+				lfStGraphic.buildCheckboxes("#states");
+
 
 				$("li").on("mouseover", function() {
 					$("li").addClass("inactive");

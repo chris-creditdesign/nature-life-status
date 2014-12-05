@@ -47,6 +47,7 @@ module.exports = function(grunt){
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',
 						'assets/js/buildWidget/buildList.js',
+						'assets/js/buildWidget/buildCheckboxes.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
 						'assets/concat/polopoly-footer.html'
@@ -64,6 +65,7 @@ module.exports = function(grunt){
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',
 						'assets/js/buildWidget/buildList.js',
+						'assets/js/buildWidget/buildCheckboxes.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
 						],
