@@ -39,13 +39,13 @@ BuildWidget.prototype.updateNumbers = function() {
 		amphibians += this.data.totals.amphibiansE;
 	}
 
-	d3.select("#total-number").text(total);
+	d3.select("#total-number").text(this.params.format(total));
 	
-	d3.select("#mammals-number").text(mammals);
+	d3.select("#mammals-number").text(this.params.format(mammals));
 	
-	d3.select("#birds-number").text(insects);
+	d3.select("#birds-number").text(this.params.format(insects));
 	
-	d3.select("#amphibians-number").text(birds);
+	d3.select("#amphibians-number").text(this.params.format(birds));
 	
-	d3.select("#insects-number").text(amphibians);
+	d3.select("#insects-number").text(this.params.format(amphibians));
 };
