@@ -43,12 +43,23 @@ module.exports = function(grunt){
 						'assets/concat/style-close.txt',
 						'assets/widget.html',
 						'assets/concat/script-open.txt',
+
 						'assets/js/params.js',
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',
-						'assets/js/buildWidget/buildList.js',
+						'assets/js/buildWidget/buildScales.js',
+						'assets/js/buildWidget/resizeContainer.js',
+
+						'assets/js/buildWidget/buildCanvas.js',
+						'assets/js/buildWidget/drawCircle.js',
+						'assets/js/buildWidget/fillCanvas.js',
+						
+						'assets/js/buildWidget/buildSVG.js',
+						'assets/js/buildWidget/drawRects.js',
+						'assets/js/buildWidget/buildTooltip.js',
+
 						'assets/js/buildWidget/buildCheckboxes.js',
-						'assets/js/buildWidget/updateList.js',
+						
 						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
@@ -63,12 +74,23 @@ module.exports = function(grunt){
 						'assets/concat/style-close.txt',
 						'assets/widget.html',
 						'assets/concat/script-open.txt',
+
 						'assets/js/params.js',
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',
-						'assets/js/buildWidget/buildList.js',
+						'assets/js/buildWidget/buildScales.js',
+						'assets/js/buildWidget/resizeContainer.js',
+
+						'assets/js/buildWidget/buildCanvas.js',
+						'assets/js/buildWidget/drawCircle.js',
+						'assets/js/buildWidget/fillCanvas.js',
+						
+						'assets/js/buildWidget/buildSVG.js',
+						'assets/js/buildWidget/drawRects.js',
+						'assets/js/buildWidget/buildTooltip.js',
+
 						'assets/js/buildWidget/buildCheckboxes.js',
-						'assets/js/buildWidget/updateList.js',
+						
 						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',

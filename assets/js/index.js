@@ -8,29 +8,22 @@
 			).done(function () {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
-				lfStGraphic.buildList();
+				
 				lfStGraphic.buildCheckboxes("#states");
-				lfStGraphic.updateNumbers();
 
+				lfStGraphic.buildScales();
+				lfStGraphic.resizeContainer("#life-status-chart");
+				lfStGraphic.buildCanvas("#canvas-chart");
+				lfStGraphic.fillCanvas();
 
-				$(".outer-wrapper .chart li").on("mouseover", function() {
-					$(".outer-wrapper .chart li").addClass("inactive");
-					$(this).removeClass("inactive");
-				});
-
-				$(".outer-wrapper .chart ul").on("mouseleave", function () {
-					$(".outer-wrapper .chart li").addClass("inactive");
-				});
+				lfStGraphic.buildSVG("#svg-chart");
+				lfStGraphic.drawRects();
 
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
 
 				$(".outer-wrapper .options input").change(function () {
-					// var thisProp = $(this).prop("checked");
-					// var thisVal = $(this).val();
-
-					lfStGraphic.updateList();
-					lfStGraphic.updateNumbers();
+					lfStGraphic.fillCanvas();
 				});
 
 			});

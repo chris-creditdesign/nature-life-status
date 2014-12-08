@@ -56,7 +56,6 @@
 
 .outer-wrapper {
   width: 100%;
-  min-height: 900px;
   position: relative;
   border: 1px solid #c8c7cf;
 }
@@ -93,74 +92,11 @@
 .outer-wrapper .key .insects {
   color: #e5ae5a;
 }
-.outer-wrapper .chart ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  line-height: 11px;
-}
-.outer-wrapper .chart li {
-  border-radius: 5px;
-  -webkit-transition: opacity 400ms ease;
-          transition: opacity 400ms ease;
-  display: inline-block;
+.outer-wrapper .chart {
   position: relative;
-  width: 10px;
-  height: 10px;
-  margin: 1px;
-  opacity: 0;
 }
-.outer-wrapper .chart .visible {
-  opacity: 1;
-  cursor: pointer;
-}
-.outer-wrapper .chart li > p {
-  border-radius: 5px;
+.outer-wrapper .chart-container {
   position: absolute;
-  background-color: #333;
-  color: #eee;
-  padding: 10px;
-  z-index: 99;
-  width: 150px;
-  left: -40px;
-  top: 14px;
-  box-sizing: border-box;
-  pointer-events: none;
-  line-height: 1.3em;
-  box-shadow: 2px 2px 5px #666666;
-  -webkit-hyphens: auto;
-     -moz-hyphens: auto;
-      -ms-hyphens: auto;
-          hyphens: auto;
-}
-.outer-wrapper .chart li > p:before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 36px;
-  border-bottom: 8px solid #333;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 0;
-  opacity: 1;
-}
-.outer-wrapper .chart .inactive > p {
-  display: none;
-}
-.outer-wrapper .chart .mammals {
-  background-color: #ef6930;
-}
-.outer-wrapper .chart .birds {
-  background-color: #9db58f;
-}
-.outer-wrapper .chart .amphibians {
-  background-color: #687a94;
-}
-.outer-wrapper .chart .insects {
-  background-color: #e5ae5a;
-}
-.outer-wrapper .chart .null {
-  background-color: #dddddd;
 }
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
@@ -231,7 +167,10 @@
 		</ul>
 	</ul>
 
-	<div class="chart" id="life-status-chart"></div>
+	<div class="chart" id="life-status-chart">
+		<div class="chart-container" id="canvas-chart"></div>
+		<div class="chart-container" id="svg-chart"></div>
+	</div>
 </div>
 <!--[if gt IE 8]><!-->
 <script type="text/javascript">
@@ -256,6 +195,12 @@ function buildParams () {
 		grey: "#666",
 		darkGrey: "#333"		
 	};
+
+	params.width = jQuery('#content').width();
+
+	/* Rectangel dimensions */
+	params.numPerLine = 50;
+	params.rectWidth = params.width / params.numPerLine;
 
 	params.key = {};
 
@@ -319,37 +264,114 @@ function BuildWidget (target, params, data) {
 	this.data = data;
 }
 
-BuildWidget.prototype.buildList = function() {
+BuildWidget.prototype.buildScales = function() {
+	var self = this;
 
-	d3.select(this.target)
-	  .append("ul")
-		.selectAll("li")
-		.data(this.data.data)
-		.enter()
-	  .append("li")
-		.attr("class", function (d) {
-			switch (d.class) {
+	this.xScale = function (i) {
+		var x = i % self.params.numPerLine;
+		return x * self.params.rectWidth;
+	}
+
+	this.yScale = function (i) {
+		var y = Math.floor( i / self.params.numPerLine );
+		return y * self.params.rectWidth;
+	}
+};
+
+BuildWidget.prototype.resizeContainer = function(target) {
+	/* Resize container */
+	this.params.height = (this.params.rectWidth/1.5) + ((this.data.data.length/this.params.numPerLine) * this.params.rectWidth);
+	jQuery(target).css("height", Math.ceil(this.params.height) + "px");
+};
+
+BuildWidget.prototype.buildCanvas = function(target) {
+	/* set up canvas */
+	this.canvas = d3.select(target).append("canvas")
+      .attr("width", this.params.width)
+      .attr("height", this.params.height);
+
+	this.context = this.canvas.node().getContext("2d");
+};
+BuildWidget.prototype.drawCircle = function(colour, x, y) {
+	this.context.beginPath();
+	this.context.fillStyle = colour;  
+	this.context.arc((this.params.rectWidth/2) + (x * this.params.rectWidth), (this.params.rectWidth/2) + (y * this.params.rectWidth), this.params.rectWidth/2.3, 0, 2 * Math.PI, false);
+	this.context.fill();
+	this.context.closePath();
+};
+
+BuildWidget.prototype.fillCanvas = function() {
+	var selectedStates = [];
+
+	var checkboxesState = jQuery('.outer-wrapper .options input:checked');
+
+	for (var i = 0; i < checkboxesState.length; i++) {
+		selectedStates.push(checkboxesState.eq(i).val());
+	};
+
+	this.context.clearRect(0, 0, this.params.width, this.params.height);
+
+	for (var i = 0; i < this.data.data.length; i++ ) {
+		var colour = "#ddd";
+
+		if ( selectedStates.indexOf(this.data.data[i].status) !== -1 ) {
+			// Should be a proper scale
+			switch (this.data.data[i].class) {
 				case "MAMMALIA":
-					return "mammals";
+					colour = this.params.colour[0];
 					break;
 				case "AVES":
-					return "birds";
+					colour = this.params.colour[1];
 					break;
 				case "AMPHIBIA":
-					return "amphibians";
+					colour = this.params.colour[2];
 					break;
 				case "INSECTA":
-					return "insects";
+					colour = this.params.colour[3];
 					break;
 				default:
-					return "null";
+					colour = "#ddd";
 			}
-		})
-		.classed("inactive", true)
-		.classed("visible", true)
-		.html(function (d) {
-			return "<p>" + d.name + "</p>";
-		});
+		}
+
+
+		var x = i % this.params.numPerLine;
+		var y = Math.floor( i / this.params.numPerLine );
+		this.drawCircle(colour,x,y);
+    }
+};
+BuildWidget.prototype.buildSVG = function(target) {
+	/*	Create SVG element */
+	this.svg = d3.select("#svg-chart")
+		.append("svg")
+		.attr("width", this.params.width)
+		.attr("height", this.params.height);
+
+};
+
+BuildWidget.prototype.drawRects = function() {
+	var self = this;
+
+	this.rects = this.svg.selectAll("rect")
+		.data(this.data.data)
+		.enter()
+		.append("rect")
+		.attr("x", function(d,i) {
+				return self.xScale(i);
+			})
+		.attr("y", function(d,i) {
+				return self.yScale(i);
+			})
+		.attr("width", this.params.rectWidth)
+		.attr("height", this.params.rectWidth)
+		.style("opacity", 0);
+		
+		// .on("mouseover", function (d) {
+		// 	console.log(d.name);
+		// });
+};
+BuildWidget.prototype.buildTooltip = function() {
+	// body...
 };
 
 BuildWidget.prototype.buildCheckboxes = function (target) {
@@ -376,28 +398,6 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 			return innerHTML;
 		});
 };
-BuildWidget.prototype.updateList = function() {
-	var self = this;
-	var selectedStates = [];
-
-	var checkboxesState = jQuery('.outer-wrapper .options input:checked');
-
-	for (var i = 0; i < checkboxesState.length; i++) {
-		selectedStates.push(checkboxesState.eq(i).val());
-	};
-
-	d3.select(this.target)
-		.select("ul")
-		.selectAll("li")
-		.classed("visible", function (d) {
-			if (selectedStates.indexOf(d.status) === -1 ) {
-				return false;
-			} else {
-				return true;
-			}
-		});
-
-};
 BuildWidget.prototype.updateNumbers = function() {
 	var totalNumber = d3.selectAll('.outer-wrapper .chart li.visible');
 
@@ -423,29 +423,22 @@ BuildWidget.prototype.updateNumbers = function() {
 			).done(function () {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
-				lfStGraphic.buildList();
+				
 				lfStGraphic.buildCheckboxes("#states");
-				lfStGraphic.updateNumbers();
 
+				lfStGraphic.buildScales();
+				lfStGraphic.resizeContainer("#life-status-chart");
+				lfStGraphic.buildCanvas("#canvas-chart");
+				lfStGraphic.fillCanvas();
 
-				$(".outer-wrapper .chart li").on("mouseover", function() {
-					$(".outer-wrapper .chart li").addClass("inactive");
-					$(this).removeClass("inactive");
-				});
-
-				$(".outer-wrapper .chart ul").on("mouseleave", function () {
-					$(".outer-wrapper .chart li").addClass("inactive");
-				});
+				lfStGraphic.buildSVG("#svg-chart");
+				lfStGraphic.drawRects();
 
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
 
 				$(".outer-wrapper .options input").change(function () {
-					// var thisProp = $(this).prop("checked");
-					// var thisVal = $(this).val();
-
-					lfStGraphic.updateList();
-					lfStGraphic.updateNumbers();
+					lfStGraphic.fillCanvas();
 				});
 
 			});

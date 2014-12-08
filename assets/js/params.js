@@ -20,6 +20,12 @@ function buildParams () {
 		darkGrey: "#333"		
 	};
 
+	params.width = jQuery('#content').width();
+
+	/* Rectangel dimensions */
+	params.numPerLine = 50;
+	params.rectWidth = params.width / params.numPerLine;
+
 	params.key = {};
 
 	params.format = d3.format("0,000");

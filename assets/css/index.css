@@ -6,7 +6,6 @@
 
 .outer-wrapper {
   width: 100%;
-  min-height: 900px;
   position: relative;
   border: 1px solid #c8c7cf;
 }
@@ -43,74 +42,11 @@
 .outer-wrapper .key .insects {
   color: #e5ae5a;
 }
-.outer-wrapper .chart ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  line-height: 11px;
-}
-.outer-wrapper .chart li {
-  border-radius: 5px;
-  -webkit-transition: opacity 400ms ease;
-          transition: opacity 400ms ease;
-  display: inline-block;
+.outer-wrapper .chart {
   position: relative;
-  width: 10px;
-  height: 10px;
-  margin: 1px;
-  opacity: 0;
 }
-.outer-wrapper .chart .visible {
-  opacity: 1;
-  cursor: pointer;
-}
-.outer-wrapper .chart li > p {
-  border-radius: 5px;
+.outer-wrapper .chart-container {
   position: absolute;
-  background-color: #333;
-  color: #eee;
-  padding: 10px;
-  z-index: 99;
-  width: 150px;
-  left: -40px;
-  top: 14px;
-  box-sizing: border-box;
-  pointer-events: none;
-  line-height: 1.3em;
-  box-shadow: 2px 2px 5px #666666;
-  -webkit-hyphens: auto;
-     -moz-hyphens: auto;
-      -ms-hyphens: auto;
-          hyphens: auto;
-}
-.outer-wrapper .chart li > p:before {
-  content: "";
-  position: absolute;
-  top: -8px;
-  left: 36px;
-  border-bottom: 8px solid #333;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 0;
-  opacity: 1;
-}
-.outer-wrapper .chart .inactive > p {
-  display: none;
-}
-.outer-wrapper .chart .mammals {
-  background-color: #ef6930;
-}
-.outer-wrapper .chart .birds {
-  background-color: #9db58f;
-}
-.outer-wrapper .chart .amphibians {
-  background-color: #687a94;
-}
-.outer-wrapper .chart .insects {
-  background-color: #e5ae5a;
-}
-.outer-wrapper .chart .null {
-  background-color: #dddddd;
 }
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;

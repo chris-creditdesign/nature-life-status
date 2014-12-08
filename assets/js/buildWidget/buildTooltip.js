@@ -1,0 +1,3 @@
+BuildWidget.prototype.buildTooltip = function() {
+	// body...
+};
