@@ -48,6 +48,54 @@
 .outer-wrapper .chart-container {
   position: absolute;
 }
+.outer-wrapper .widget-tooltip {
+  -webkit-transition: opacity 400ms ease;
+          transition: opacity 400ms ease;
+  border-radius: 5px;
+  position: absolute;
+  width: 200px;
+  height: auto;
+  padding: 6px 10px 6px 15px;
+  color: #dddddd;
+  background-color: #333333;
+  pointer-events: none;
+  box-shadow: 2px 2px 5px #333333;
+  line-height: 1.4em;
+  opacity: 1;
+}
+.outer-wrapper .widget-tooltip p {
+  padding: 0;
+}
+.outer-wrapper .widget-tooltip span {
+  font-weight: bold;
+  color: #fff;
+}
+.outer-wrapper .left:before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -8px;
+  border-bottom: 8px solid transparent;
+  border-left: 0;
+  border-right: 8px solid #333333;
+  border-top: 8px solid transparent;
+  opacity: 1;
+}
+.outer-wrapper .right:before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: -8px;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #333333;
+  border-right: 0;
+  border-top: 8px solid transparent;
+  opacity: 1;
+}
+.outer-wrapper .hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;

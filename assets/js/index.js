@@ -19,11 +19,19 @@
 				lfStGraphic.buildSVG("#svg-chart");
 				lfStGraphic.drawRects();
 
+				/* Don't show the hover on mobile */
+				if ($('.outer-wrapper').width() > 600 ) {
+					lfStGraphic.buildTooltip();
+				}
+
+				lfStGraphic.updateNumbers();
+
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
 
 				$(".outer-wrapper .options input").change(function () {
 					lfStGraphic.fillCanvas();
+					lfStGraphic.updateNumbers();
 				});
 
 			});

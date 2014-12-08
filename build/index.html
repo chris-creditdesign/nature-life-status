@@ -98,6 +98,54 @@
 .outer-wrapper .chart-container {
   position: absolute;
 }
+.outer-wrapper .widget-tooltip {
+  -webkit-transition: opacity 400ms ease;
+          transition: opacity 400ms ease;
+  border-radius: 5px;
+  position: absolute;
+  width: 200px;
+  height: auto;
+  padding: 6px 10px 6px 15px;
+  color: #dddddd;
+  background-color: #333333;
+  pointer-events: none;
+  box-shadow: 2px 2px 5px #333333;
+  line-height: 1.4em;
+  opacity: 1;
+}
+.outer-wrapper .widget-tooltip p {
+  padding: 0;
+}
+.outer-wrapper .widget-tooltip span {
+  font-weight: bold;
+  color: #fff;
+}
+.outer-wrapper .left:before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: -8px;
+  border-bottom: 8px solid transparent;
+  border-left: 0;
+  border-right: 8px solid #333333;
+  border-top: 8px solid transparent;
+  opacity: 1;
+}
+.outer-wrapper .right:before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: -8px;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid #333333;
+  border-right: 0;
+  border-top: 8px solid transparent;
+  opacity: 1;
+}
+.outer-wrapper .hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 .outer-wrapper .options {
   -webkit-transition: opacity 0.4s ease;
   transition: opacity 0.4s ease;
@@ -170,6 +218,11 @@
 	<div class="chart" id="life-status-chart">
 		<div class="chart-container" id="canvas-chart"></div>
 		<div class="chart-container" id="svg-chart"></div>
+		<div class="widget-tooltip left hidden" id="widget-tooltip">
+			<p id="name"></p>
+			<p>Latin name</p>
+			<p>Threat status</p>
+		</div>
 	</div>
 </div>
 <!--[if gt IE 8]><!-->
@@ -213,11 +266,60 @@ function buildData (data) {
 	var updatedData = [];
 	var statesArray = [];
 
+	var totals = {
+		mammalsCR: 0,
+		mammalsV: 0,
+		mammalsE: 0,
+		insectsCR: 0,
+		insectsV: 0,
+		insectsE: 0,
+		birdsCR: 0,
+		birdsV: 0,
+		birdsE: 0,
+		amphibiansCR: 0,
+		amphibiansV: 0,
+		amphibiansE: 0
+	};
+
 	for (var i = 0; i < data.length; i++) {
 		var myObject = {};
 
 		myObject.class = data[i].class;
 		myObject.status = data[i].status;
+
+		if ( myObject.class === "MAMMALIA" ) {
+			if (myObject.status === "critically_endangered") {
+				++totals.mammalsCR;
+			} else if (myObject.status === "vunerable") {
+				++totals.mammalsV;
+			} else if ( myObject.status === "endangered") {
+				++totals.mammalsE;
+			}
+		} else if ( myObject.class === "INSECTA") {
+			if (myObject.status === "critically_endangered") {
+				++totals.insectsCR;
+			} else if (myObject.status === "vunerable") {
+				++totals.insectsV;
+			} else if ( myObject.status === "endangered") {
+				++totals.insectsE;
+			}
+		} else if ( myObject.class === "AVES" ) {
+			if (myObject.status === "critically_endangered") {
+				++totals.birdsCR;
+			} else if (myObject.status === "vunerable") {
+				++totals.birdsV;
+			} else if ( myObject.status === "endangered") {
+				++totals.birdsE;
+			}
+		} else if ( myObject.class === "AMPHIBIA" ) {
+			if (myObject.status === "critically_endangered") {
+				++totals.amphibiansCR;
+			} else if (myObject.status === "vunerable") {
+				++totals.amphibiansV;
+			} else if ( myObject.status === "endangered") {
+				++totals.amphibiansE;
+			}
+		}
 
 		if (data[i].common_names !== "") {
 			myObject.names = data[i].common_names;
@@ -240,7 +342,8 @@ function buildData (data) {
 
 	return {
 		data: updatedData,
-		status: statesArray
+		status: statesArray,
+		totals: totals
 	};
 }
 
@@ -365,13 +468,52 @@ BuildWidget.prototype.drawRects = function() {
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
 		.style("opacity", 0);
-		
-		// .on("mouseover", function (d) {
-		// 	console.log(d.name);
-		// });
 };
+
 BuildWidget.prototype.buildTooltip = function() {
-	// body...
+	var self = this;
+
+	this.rects
+		.on("mouseover", function (d) {
+			var myRect = d3.select(this);
+
+			
+
+			var tooltipWidth = parseInt(d3.select("#widget-tooltip").style("padding-left"),10) + parseInt(d3.select("#widget-tooltip").style("width"),10) + parseInt(d3.select("#widget-tooltip").style("padding-right"),10);
+
+			var top = (parseFloat(myRect.attr("y"))) - self.params.rectWidth;
+			var left = (parseFloat(myRect.attr("x")));
+
+			if ( parseFloat(myRect.attr("x")) > (self.params.width / 2) ) {
+				left -= tooltipWidth;
+	
+				d3.select("#widget-tooltip")
+					.style("top",  top + "px")
+					.style("left", left + "px")
+					.classed("left", false)
+					.classed("right", true)
+					.classed("hidden", false);
+			} else {
+				left += self.params.rectWidth;
+
+				d3.select("#widget-tooltip")
+					.style("top",  top + "px")
+					.style("left", left + "px")
+					.classed("left", true)
+					.classed("right", false)
+					.classed("hidden", false);
+			}
+
+			
+			d3.select("#name").html(d.name);
+
+		}).on("mouseout", function () {
+			self.hideTooltip();
+		});
+};
+
+BuildWidget.prototype.hideTooltip = function () {
+	d3.select("#widget-tooltip").classed("hidden", true);
 };
 
 BuildWidget.prototype.buildCheckboxes = function (target) {
@@ -399,18 +541,55 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 		});
 };
 BuildWidget.prototype.updateNumbers = function() {
-	var totalNumber = d3.selectAll('.outer-wrapper .chart li.visible');
 
-	var mammalsNumber = d3.selectAll('.outer-wrapper .chart li.mammals.visible');
-	var birdsNumber = d3.selectAll('.outer-wrapper .chart li.birds.visible'); 
-	var amphibiansNumber = d3.selectAll('.outer-wrapper .chart li.amphibians.visible');
-	var insectsNumber = d3.selectAll('.outer-wrapper .chart li.insects.visible');
+	/* This should be combined into a function */ 
+	var selectedStates = [];
 
-	d3.select("#total-number").text(this.params.format(totalNumber[0].length));
-	d3.select("#mammals-number").text(this.params.format(mammalsNumber[0].length));
-	d3.select("#birds-number").text(this.params.format(birdsNumber[0].length));
-	d3.select("#amphibians-number").text(this.params.format(amphibiansNumber[0].length));
-	d3.select("#insects-number").text(this.params.format(insectsNumber[0].length));
+	var checkboxesState = jQuery('.outer-wrapper .options input:checked');
+
+	for (var i = 0; i < checkboxesState.length; i++) {
+		selectedStates.push(checkboxesState.eq(i).val());
+	};
+
+	var total = 0;
+	var mammals = 0;
+	var insects = 0;
+	var birds = 0;
+	var amphibians = 0;
+
+	if ( selectedStates.indexOf("critically_endangered") !== -1 ) {
+		total += (this.data.totals.mammalsCR + this.data.totals.insectsCR + this.data.totals.birdsCR + this.data.totals.amphibiansCR);
+		mammals += this.data.totals.mammalsCR;
+		insects += this.data.totals.insectsCR;
+		birds += this.data.totals.birdsCR;
+		amphibians += this.data.totals.amphibiansCR;
+	}
+
+	if ( selectedStates.indexOf("vunerable") !== -1 ) {
+		total += (this.data.totals.mammalsV + this.data.totals.insectsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
+		mammals += this.data.totals.mammalsV;
+		insects += this.data.totals.insectsV;
+		birds += this.data.totals.birdsV;
+		amphibians += this.data.totals.amphibiansV;
+	}
+
+	if ( selectedStates.indexOf("endangered") !== -1 ) {
+		total += (this.data.totals.mammalsE + this.data.totals.insectsE + this.data.totals.birdsE + this.data.totals.amphibiansE);
+		mammals += this.data.totals.mammalsE;
+		insects += this.data.totals.insectsE;
+		birds += this.data.totals.birdsE;
+		amphibians += this.data.totals.amphibiansE;
+	}
+
+	d3.select("#total-number").text(total);
+	
+	d3.select("#mammals-number").text(mammals);
+	
+	d3.select("#birds-number").text(insects);
+	
+	d3.select("#amphibians-number").text(birds);
+	
+	d3.select("#insects-number").text(amphibians);
 };
 
 (function() {
@@ -434,11 +613,19 @@ BuildWidget.prototype.updateNumbers = function() {
 				lfStGraphic.buildSVG("#svg-chart");
 				lfStGraphic.drawRects();
 
+				/* Don't show the hover on mobile */
+				if ($('.outer-wrapper').width() > 600 ) {
+					lfStGraphic.buildTooltip();
+				}
+
+				lfStGraphic.updateNumbers();
+
 				// TO DO ADD LEFT RIGHT to tool tips
 				// $("li").eq(300).position().left;
 
 				$(".outer-wrapper .options input").change(function () {
 					lfStGraphic.fillCanvas();
+					lfStGraphic.updateNumbers();
 				});
 
 			});

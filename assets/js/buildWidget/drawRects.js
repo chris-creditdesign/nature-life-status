@@ -14,8 +14,4 @@ BuildWidget.prototype.drawRects = function() {
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
 		.style("opacity", 0);
-		
-		// .on("mouseover", function (d) {
-		// 	console.log(d.name);
-		// });
 };

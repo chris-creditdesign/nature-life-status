@@ -78,6 +78,59 @@ $insects:	#e5ae5a;
 		position: absolute;
 	}
 
+	.widget-tooltip {
+		@include transition(opacity);
+		@include border-radius;
+		position: absolute;
+		width: 200px;
+		height: auto;
+		padding: 6px 10px 6px 15px;
+		color: $veryLightGrey;
+		background-color: $darkGrey;
+		pointer-events: none;
+		box-shadow: 2px 2px 5px $darkGrey;
+		line-height: 1.4em;
+		opacity: 1;
+
+		p {
+			padding: 0;
+		}
+
+		span {
+			font-weight: bold;
+			color: #fff;
+		}
+	}
+
+	.left:before {
+		content: "";
+		position:absolute;
+		top: 10px;
+		left: -8px;
+		border-bottom: 8px solid transparent;
+		border-left: 0;
+		border-right: 8px solid $darkGrey;
+		border-top: 8px solid transparent;
+		opacity: 1;
+	}
+
+	.right:before {
+		content: "";
+		position:absolute;
+		top: 10px;
+		right: -8px;
+		border-bottom: 8px solid transparent;
+		border-left: 8px solid $darkGrey;
+		border-right: 0;
+		border-top: 8px solid transparent;
+		opacity: 1;
+	}
+
+	.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+
 	.options {
 		// @include breakpoint(large-screen) { 
 		// 	-webkit-column-count: 3;
