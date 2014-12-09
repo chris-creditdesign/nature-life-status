@@ -1,5 +1,10 @@
 function buildData (data) {
 	var updatedData = [];
+
+	var mammalsArray = [];
+	var birdsArray = [];
+	var amphibiansArray = [];
+
 	var statesArray = [];
 
 	var totals = {
@@ -21,32 +26,6 @@ function buildData (data) {
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
 
-			if ( myObject.class === "MAMMALIA" ) {
-				if (myObject.status === "critically_endangered") {
-					++totals.mammalsCR;
-				} else if (myObject.status === "vunerable") {
-					++totals.mammalsV;
-				} else if ( myObject.status === "endangered") {
-					++totals.mammalsE;
-				}
-			} else if ( myObject.class === "AVES" ) {
-				if (myObject.status === "critically_endangered") {
-					++totals.birdsCR;
-				} else if (myObject.status === "vunerable") {
-					++totals.birdsV;
-				} else if ( myObject.status === "endangered") {
-					++totals.birdsE;
-				}
-			} else if ( myObject.class === "AMPHIBIA" ) {
-				if (myObject.status === "critically_endangered") {
-					++totals.amphibiansCR;
-				} else if (myObject.status === "vunerable") {
-					++totals.amphibiansV;
-				} else if ( myObject.status === "endangered") {
-					++totals.amphibiansE;
-				}
-			}
-
 			myObject.statusText = splitAndCapitalise(myObject.status);
 
 			if (data[i].common_names !== "") {
@@ -56,18 +35,56 @@ function buildData (data) {
 			} else {
 				myObject.names = data[i].species;
 			}
+
 			myObject.name = myObject.names.split(',')[0].split('|')[0];
 			myObject.name = capitaliseFirstLetter(myObject.name);
-			
-			updatedData.push(myObject);
 
 			if (statesArray.indexOf(data[i].status) === -1) {
 				statesArray.push(data[i].status);
 			}
+
+			if ( myObject.class === "MAMMALIA" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.mammalsCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.mammalsV;
+				} else if ( myObject.status === "endangered") {
+					++totals.mammalsE;
+				}
+
+				mammalsArray.push(myObject);
+
+			} else if ( myObject.class === "AVES" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.birdsCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.birdsV;
+				} else if ( myObject.status === "endangered") {
+					++totals.birdsE;
+				}
+
+				birdsArray.push(myObject);
+
+			} else if ( myObject.class === "AMPHIBIA" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.amphibiansCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.amphibiansV;
+				} else if ( myObject.status === "endangered") {
+					++totals.amphibiansE;
+				}
+
+				amphibiansArray.push(myObject);
+			}
 		}
 	}
 
-	updatedData.sort(compareClass);
+	mammalsArray.sort(compareNames);
+	birdsArray.sort(compareNames);
+	amphibiansArray.sort(compareNames);
+
+	updatedData = mammalsArray.concat(birdsArray, amphibiansArray);
+
 	statesArray.sort().reverse();
 
 	return {

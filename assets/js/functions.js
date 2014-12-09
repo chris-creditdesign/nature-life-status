@@ -7,6 +7,14 @@ function compareClass(a,b) {
 	return 0;
 }
 
+function compareNames(a,b) {
+	if (a.name > b.name)
+		return 1;
+	if (a.name < b.name)
+		return -1;
+	return 0;
+}
+
 function capitaliseFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
