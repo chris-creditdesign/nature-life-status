@@ -1,10 +1,10 @@
 function buildParams () {
 	var params = {};
 
-	params.colour =  [	"#ef6930", // mammals
-						"#9db58f", // birds
-						"#687a94", // amphibians
-						"#e5ae5a" //  insects
+	params.colour =  [	"#ef6930", /* mammals */
+						"#9db58f", /* birds */
+						"#687a94", /* amphibians */
+						"#e5ae5a" /*  insects */
 					];
 
 	params.species = [	"mammals",

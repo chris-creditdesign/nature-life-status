@@ -5,8 +5,6 @@ BuildWidget.prototype.buildTooltip = function() {
 		.on("mouseover", function (d) {
 			var myRect = d3.select(this);
 
-			
-
 			var tooltipWidth = parseInt(d3.select("#widget-tooltip").style("padding-left"),10) + parseInt(d3.select("#widget-tooltip").style("width"),10) + parseInt(d3.select("#widget-tooltip").style("padding-right"),10);
 
 			var top = (parseFloat(myRect.attr("y"))) - self.params.rectWidth;
@@ -34,6 +32,7 @@ BuildWidget.prototype.buildTooltip = function() {
 
 			
 			d3.select("#name").html(d.name);
+			d3.select("#status").html(d.statusText);
 
 		}).on("mouseout", function () {
 			self.hideTooltip();

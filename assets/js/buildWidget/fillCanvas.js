@@ -32,7 +32,6 @@ BuildWidget.prototype.fillCanvas = function() {
 			}
 		}
 
-
 		var x = i % this.params.numPerLine;
 		var y = Math.floor( i / this.params.numPerLine );
 		this.drawCircle(colour,x,y);

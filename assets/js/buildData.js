@@ -57,6 +57,8 @@ function buildData (data) {
 			}
 		}
 
+		myObject.statusText = splitAndCapitalise(myObject.status);
+
 		if (data[i].common_names !== "") {
 			myObject.names = data[i].common_names;
 		} else if (data[i].synonyms !== "") {
@@ -81,18 +83,4 @@ function buildData (data) {
 		status: statesArray,
 		totals: totals
 	};
-}
-
-/*	Function to sort papers by citation */
-function compareClass(a,b) {
-	if (a.class < b.class)
-		return 1;
-	if (a.class > b.class)
-		return -1;
-	return 0;
-}
-
-function capitaliseFirstLetter(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }

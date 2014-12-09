@@ -67,6 +67,9 @@
   padding: 10px 10px 0 10px;
   margin: 0;
 }
+.outer-wrapper .key li {
+  list-style: none;
+}
 .outer-wrapper .key .breakdown {
   margin-left: 17px;
 }
@@ -221,19 +224,45 @@
 		<div class="widget-tooltip left hidden" id="widget-tooltip">
 			<p id="name"></p>
 			<p>Latin name</p>
-			<p>Threat status</p>
+			<p id="status"></p>
 		</div>
 	</div>
 </div>
 <!--[if gt IE 8]><!-->
 <script type="text/javascript">
+/*	Function to sort objects by class */
+function compareClass(a,b) {
+	if (a.class < b.class)
+		return 1;
+	if (a.class > b.class)
+		return -1;
+	return 0;
+}
+
+function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function splitAndCapitalise(string) {
+
+	var myString = string.split('_');
+	
+	for (var y = 0; y < myString.length; y++) {
+		myString[y] = capitaliseFirstLetter(myString[y]);
+	}
+
+	myString = myString.join(" ");
+
+	return myString;
+}
+
 function buildParams () {
 	var params = {};
 
-	params.colour =  [	"#ef6930", // mammals
-						"#9db58f", // birds
-						"#687a94", // amphibians
-						"#e5ae5a" //  insects
+	params.colour =  [	"#ef6930", /* mammals */
+						"#9db58f", /* birds */
+						"#687a94", /* amphibians */
+						"#e5ae5a" /*  insects */
 					];
 
 	params.species = [	"mammals",
@@ -321,6 +350,8 @@ function buildData (data) {
 			}
 		}
 
+		myObject.statusText = splitAndCapitalise(myObject.status);
+
 		if (data[i].common_names !== "") {
 			myObject.names = data[i].common_names;
 		} else if (data[i].synonyms !== "") {
@@ -345,20 +376,6 @@ function buildData (data) {
 		status: statesArray,
 		totals: totals
 	};
-}
-
-/*	Function to sort papers by citation */
-function compareClass(a,b) {
-	if (a.class < b.class)
-		return 1;
-	if (a.class > b.class)
-		return -1;
-	return 0;
-}
-
-function capitaliseFirstLetter(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function BuildWidget (target, params, data) {
@@ -395,6 +412,7 @@ BuildWidget.prototype.buildCanvas = function(target) {
 
 	this.context = this.canvas.node().getContext("2d");
 };
+
 BuildWidget.prototype.drawCircle = function(colour, x, y) {
 	this.context.beginPath();
 	this.context.fillStyle = colour;  
@@ -437,12 +455,12 @@ BuildWidget.prototype.fillCanvas = function() {
 			}
 		}
 
-
 		var x = i % this.params.numPerLine;
 		var y = Math.floor( i / this.params.numPerLine );
 		this.drawCircle(colour,x,y);
     }
 };
+
 BuildWidget.prototype.buildSVG = function(target) {
 	/*	Create SVG element */
 	this.svg = d3.select("#svg-chart")
@@ -477,8 +495,6 @@ BuildWidget.prototype.buildTooltip = function() {
 		.on("mouseover", function (d) {
 			var myRect = d3.select(this);
 
-			
-
 			var tooltipWidth = parseInt(d3.select("#widget-tooltip").style("padding-left"),10) + parseInt(d3.select("#widget-tooltip").style("width"),10) + parseInt(d3.select("#widget-tooltip").style("padding-right"),10);
 
 			var top = (parseFloat(myRect.attr("y"))) - self.params.rectWidth;
@@ -506,6 +522,7 @@ BuildWidget.prototype.buildTooltip = function() {
 
 			
 			d3.select("#name").html(d.name);
+			d3.select("#status").html(d.statusText);
 
 		}).on("mouseout", function () {
 			self.hideTooltip();
@@ -527,19 +544,14 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 		.append("li")
 		.html(function (d, i) {
 			var checked = "checked";
-			var safeName = d.split('_');
-			
-			for (var i = 0; i < safeName.length; i++) {
-				safeName[i] = capitaliseFirstLetter(safeName[i]);
-			};
-
-			safeName = safeName.join(" ");
+			var safeName = splitAndCapitalise(d);
 
 			var innerHTML = "<label ><input type='checkbox' value='" + d + "' " + checked + "> " + safeName + "</label>";
 
 			return innerHTML;
 		});
 };
+
 BuildWidget.prototype.updateNumbers = function() {
 
 	/* This should be combined into a function */ 
@@ -598,7 +610,8 @@ BuildWidget.prototype.updateNumbers = function() {
 			/*	jQuery ready */
 			$.when(
 				$.getScript("http://www.nature.com/polopoly_static/js/d3.v3.min.js"),
-				$.getScript("data/threatened_species_data.js")
+				// $.getScript("data/threatened_species_data.js")
+				$.getScript("http://www.nature.com/widget_assets_polopoly/v516n7530/threatened_species_data.js")
 			).done(function () {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));

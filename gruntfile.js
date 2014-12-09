@@ -44,6 +44,7 @@ module.exports = function(grunt){
 						'assets/widget.html',
 						'assets/concat/script-open.txt',
 
+						'assets/js/functions.js',
 						'assets/js/params.js',
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',
@@ -75,6 +76,7 @@ module.exports = function(grunt){
 						'assets/widget.html',
 						'assets/concat/script-open.txt',
 
+						'assets/js/functions.js',
 						'assets/js/params.js',
 						'assets/js/buildData.js',
 						'assets/js/buildWidget/buildWidget.js',

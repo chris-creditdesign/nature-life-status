@@ -4,7 +4,8 @@
 			/*	jQuery ready */
 			$.when(
 				$.getScript("http://www.nature.com/polopoly_static/js/d3.v3.min.js"),
-				$.getScript("data/threatened_species_data.js")
+				// $.getScript("data/threatened_species_data.js")
+				$.getScript("http://www.nature.com/widget_assets_polopoly/v516n7530/threatened_species_data.js")
 			).done(function () {
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
