@@ -42,28 +42,22 @@
   color: #666666;
 }
 .outer-wrapper .key .mammals:before {
-  background-color: #ef6930;
+  background-color: #f26621;
 }
 .outer-wrapper .key .mammals .number {
-  color: #ef6930;
+  color: #f26621;
 }
 .outer-wrapper .key .birds:before {
-  background-color: #9db58f;
+  background-color: #66c7c3;
 }
 .outer-wrapper .key .birds .number {
-  color: #9db58f;
+  color: #66c7c3;
 }
 .outer-wrapper .key .amphibians:before {
-  background-color: #687a94;
+  background-color: #677a94;
 }
 .outer-wrapper .key .amphibians .number {
-  color: #687a94;
-}
-.outer-wrapper .key .insects:before {
-  background-color: #e5ae5a;
-}
-.outer-wrapper .key .insects .number {
-  color: #e5ae5a;
+  color: #677a94;
 }
 .outer-wrapper .chart {
   position: relative;

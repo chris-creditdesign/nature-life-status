@@ -11,30 +11,26 @@ BuildWidget.prototype.updateNumbers = function() {
 
 	var total = 0;
 	var mammals = 0;
-	var insects = 0;
 	var birds = 0;
 	var amphibians = 0;
 
 	if ( selectedStates.indexOf("critically_endangered") !== -1 ) {
-		total += (this.data.totals.mammalsCR + this.data.totals.insectsCR + this.data.totals.birdsCR + this.data.totals.amphibiansCR);
+		total += (this.data.totals.mammalsCR + this.data.totals.birdsCR + this.data.totals.amphibiansCR);
 		mammals += this.data.totals.mammalsCR;
-		insects += this.data.totals.insectsCR;
 		birds += this.data.totals.birdsCR;
 		amphibians += this.data.totals.amphibiansCR;
 	}
 
 	if ( selectedStates.indexOf("vunerable") !== -1 ) {
-		total += (this.data.totals.mammalsV + this.data.totals.insectsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
+		total += (this.data.totals.mammalsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
 		mammals += this.data.totals.mammalsV;
-		insects += this.data.totals.insectsV;
 		birds += this.data.totals.birdsV;
 		amphibians += this.data.totals.amphibiansV;
 	}
 
 	if ( selectedStates.indexOf("endangered") !== -1 ) {
-		total += (this.data.totals.mammalsE + this.data.totals.insectsE + this.data.totals.birdsE + this.data.totals.amphibiansE);
+		total += (this.data.totals.mammalsE + this.data.totals.birdsE + this.data.totals.amphibiansE);
 		mammals += this.data.totals.mammalsE;
-		insects += this.data.totals.insectsE;
 		birds += this.data.totals.birdsE;
 		amphibians += this.data.totals.amphibiansE;
 	}
@@ -43,9 +39,7 @@ BuildWidget.prototype.updateNumbers = function() {
 	
 	d3.select("#mammals-number").text(this.params.format(mammals));
 	
-	d3.select("#birds-number").text(this.params.format(insects));
+	d3.select("#birds-number").text(this.params.format(birds));
 	
-	d3.select("#amphibians-number").text(this.params.format(birds));
-	
-	d3.select("#insects-number").text(this.params.format(amphibians));
+	d3.select("#amphibians-number").text(this.params.format(amphibians));
 };

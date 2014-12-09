@@ -11,10 +11,9 @@ $lightGrey:		#999;
 $grey:		 	#666;
 $darkGrey:		#333;
 
-$mammals:	#ef6930;
-$birds:		#9db58f;
-$amphibians:#687a94;
-$insects:	#e5ae5a;
+$mammals:	#f26621;
+$birds:		#66c7c3;
+$amphibians:#677a94;
 
 .status-message {
 	border: 1px solid #c00;
@@ -89,15 +88,6 @@ $insects:	#e5ae5a;
 			}
 			.number {
 				color: $amphibians;
-			}
-		}
-
-		.insects {
-			&:before {
-				background-color: $insects;
-			}
-			.number {
-				color: $insects;
 			}
 		}
 	}

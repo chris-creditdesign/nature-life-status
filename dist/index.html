@@ -43,28 +43,22 @@
   color: #666666;
 }
 .outer-wrapper .key .mammals:before {
-  background-color: #ef6930;
+  background-color: #f26621;
 }
 .outer-wrapper .key .mammals .number {
-  color: #ef6930;
+  color: #f26621;
 }
 .outer-wrapper .key .birds:before {
-  background-color: #9db58f;
+  background-color: #66c7c3;
 }
 .outer-wrapper .key .birds .number {
-  color: #9db58f;
+  color: #66c7c3;
 }
 .outer-wrapper .key .amphibians:before {
-  background-color: #687a94;
+  background-color: #677a94;
 }
 .outer-wrapper .key .amphibians .number {
-  color: #687a94;
-}
-.outer-wrapper .key .insects:before {
-  background-color: #e5ae5a;
-}
-.outer-wrapper .key .insects .number {
-  color: #e5ae5a;
+  color: #677a94;
 }
 .outer-wrapper .chart {
   position: relative;
@@ -180,7 +174,6 @@
 		<li>Total: <span id="total-number" class="number"></span> <span class="list-unit">THREATENED MAMMALS, BIRDS, AMPHIBIANS AND INSECTS</span></li>
 		<ul class="breakdown">
 			<li class="mammals">Mammals: <span id="mammals-number" class="mammals number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
-			<li class="insects">Insects: <span id="insects-number" class="insects number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
 			<li class="birds">Birds: <span id="birds-number" class="birds number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
 			<li class="amphibians">Amphibians: <span id="amphibians-number" class="amphibians number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
 		</ul>
@@ -227,16 +220,9 @@ function splitAndCapitalise(string) {
 function buildParams () {
 	var params = {};
 
-	params.colour =  [	"#ef6930", /* mammals */
-						"#9db58f", /* birds */
-						"#687a94", /* amphibians */
-						"#e5ae5a" /*  insects */
-					];
-
-	params.species = [	"mammals",
-						"birds",
-						"amphibians",
-						"insects"
+	params.colour =  [	"#f26621", /* mammals */
+						"#66c7c3", /* birds */
+						"#677a94" /* amphibians */
 					];
 
 	params.uiColour = {
@@ -267,9 +253,6 @@ function buildData (data) {
 		mammalsCR: 0,
 		mammalsV: 0,
 		mammalsE: 0,
-		insectsCR: 0,
-		insectsV: 0,
-		insectsE: 0,
 		birdsCR: 0,
 		birdsV: 0,
 		birdsE: 0,
@@ -279,61 +262,55 @@ function buildData (data) {
 	};
 
 	for (var i = 0; i < data.length; i++) {
-		var myObject = {};
+		if (data[i].class !== "INSECTA") {
+			var myObject = {};
 
-		myObject.class = data[i].class;
-		myObject.status = data[i].status;
+			myObject.class = data[i].class;
+			myObject.status = data[i].status;
 
-		if ( myObject.class === "MAMMALIA" ) {
-			if (myObject.status === "critically_endangered") {
-				++totals.mammalsCR;
-			} else if (myObject.status === "vunerable") {
-				++totals.mammalsV;
-			} else if ( myObject.status === "endangered") {
-				++totals.mammalsE;
+			if ( myObject.class === "MAMMALIA" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.mammalsCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.mammalsV;
+				} else if ( myObject.status === "endangered") {
+					++totals.mammalsE;
+				}
+			} else if ( myObject.class === "AVES" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.birdsCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.birdsV;
+				} else if ( myObject.status === "endangered") {
+					++totals.birdsE;
+				}
+			} else if ( myObject.class === "AMPHIBIA" ) {
+				if (myObject.status === "critically_endangered") {
+					++totals.amphibiansCR;
+				} else if (myObject.status === "vunerable") {
+					++totals.amphibiansV;
+				} else if ( myObject.status === "endangered") {
+					++totals.amphibiansE;
+				}
 			}
-		} else if ( myObject.class === "INSECTA") {
-			if (myObject.status === "critically_endangered") {
-				++totals.insectsCR;
-			} else if (myObject.status === "vunerable") {
-				++totals.insectsV;
-			} else if ( myObject.status === "endangered") {
-				++totals.insectsE;
-			}
-		} else if ( myObject.class === "AVES" ) {
-			if (myObject.status === "critically_endangered") {
-				++totals.birdsCR;
-			} else if (myObject.status === "vunerable") {
-				++totals.birdsV;
-			} else if ( myObject.status === "endangered") {
-				++totals.birdsE;
-			}
-		} else if ( myObject.class === "AMPHIBIA" ) {
-			if (myObject.status === "critically_endangered") {
-				++totals.amphibiansCR;
-			} else if (myObject.status === "vunerable") {
-				++totals.amphibiansV;
-			} else if ( myObject.status === "endangered") {
-				++totals.amphibiansE;
-			}
-		}
 
-		myObject.statusText = splitAndCapitalise(myObject.status);
+			myObject.statusText = splitAndCapitalise(myObject.status);
 
-		if (data[i].common_names !== "") {
-			myObject.names = data[i].common_names;
-		} else if (data[i].synonyms !== "") {
-			myObject.names = data[i].synonyms;
-		} else {
-			myObject.names = data[i].species;
-		}
-		myObject.name = myObject.names.split(',')[0].split('|')[0];
-		myObject.name = capitaliseFirstLetter(myObject.name);
-		
-		updatedData.push(myObject);
+			if (data[i].common_names !== "") {
+				myObject.names = data[i].common_names;
+			} else if (data[i].synonyms !== "") {
+				myObject.names = data[i].synonyms;
+			} else {
+				myObject.names = data[i].species;
+			}
+			myObject.name = myObject.names.split(',')[0].split('|')[0];
+			myObject.name = capitaliseFirstLetter(myObject.name);
+			
+			updatedData.push(myObject);
 
-		if (statesArray.indexOf(data[i].status) === -1) {
-			statesArray.push(data[i].status);
+			if (statesArray.indexOf(data[i].status) === -1) {
+				statesArray.push(data[i].status);
+			}
 		}
 	}
 
@@ -533,30 +510,26 @@ BuildWidget.prototype.updateNumbers = function() {
 
 	var total = 0;
 	var mammals = 0;
-	var insects = 0;
 	var birds = 0;
 	var amphibians = 0;
 
 	if ( selectedStates.indexOf("critically_endangered") !== -1 ) {
-		total += (this.data.totals.mammalsCR + this.data.totals.insectsCR + this.data.totals.birdsCR + this.data.totals.amphibiansCR);
+		total += (this.data.totals.mammalsCR + this.data.totals.birdsCR + this.data.totals.amphibiansCR);
 		mammals += this.data.totals.mammalsCR;
-		insects += this.data.totals.insectsCR;
 		birds += this.data.totals.birdsCR;
 		amphibians += this.data.totals.amphibiansCR;
 	}
 
 	if ( selectedStates.indexOf("vunerable") !== -1 ) {
-		total += (this.data.totals.mammalsV + this.data.totals.insectsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
+		total += (this.data.totals.mammalsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
 		mammals += this.data.totals.mammalsV;
-		insects += this.data.totals.insectsV;
 		birds += this.data.totals.birdsV;
 		amphibians += this.data.totals.amphibiansV;
 	}
 
 	if ( selectedStates.indexOf("endangered") !== -1 ) {
-		total += (this.data.totals.mammalsE + this.data.totals.insectsE + this.data.totals.birdsE + this.data.totals.amphibiansE);
+		total += (this.data.totals.mammalsE + this.data.totals.birdsE + this.data.totals.amphibiansE);
 		mammals += this.data.totals.mammalsE;
-		insects += this.data.totals.insectsE;
 		birds += this.data.totals.birdsE;
 		amphibians += this.data.totals.amphibiansE;
 	}
@@ -565,11 +538,9 @@ BuildWidget.prototype.updateNumbers = function() {
 	
 	d3.select("#mammals-number").text(this.params.format(mammals));
 	
-	d3.select("#birds-number").text(this.params.format(insects));
+	d3.select("#birds-number").text(this.params.format(birds));
 	
-	d3.select("#amphibians-number").text(this.params.format(birds));
-	
-	d3.select("#insects-number").text(this.params.format(amphibians));
+	d3.select("#amphibians-number").text(this.params.format(amphibians));
 };
 
 (function() {
