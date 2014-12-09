@@ -68,6 +68,7 @@ function buildData (data) {
 	}
 
 	updatedData.sort(compareClass);
+	statesArray.sort().reverse();
 
 	return {
 		data: updatedData,
