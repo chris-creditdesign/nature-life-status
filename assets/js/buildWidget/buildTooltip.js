@@ -1,7 +1,7 @@
 BuildWidget.prototype.buildTooltip = function() {
 	var self = this;
 
-	this.rects
+	this.svg.selectAll("rect")
 		.on("mouseover", function (d) {
 			var myRect = d3.select(this);
 
@@ -29,7 +29,6 @@ BuildWidget.prototype.buildTooltip = function() {
 					.classed("right", false)
 					.classed("hidden", false);
 			}
-
 			
 			d3.select("#name").html(d.name);
 			d3.select("#status").html(d.statusText);

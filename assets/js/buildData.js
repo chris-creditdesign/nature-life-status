@@ -71,6 +71,8 @@ function buildData (data) {
 
 	return {
 		data: updatedData,
+		activeData: [],
+		selectedStates: [],
 		status: statesArray,
 		totals: totals
 	};

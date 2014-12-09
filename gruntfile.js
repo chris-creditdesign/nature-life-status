@@ -61,6 +61,8 @@ module.exports = function(grunt){
 
 						'assets/js/buildWidget/buildCheckboxes.js',
 						
+						'assets/js/buildWidget/updateData.js',
+						'assets/js/buildWidget/updateView.js',
 						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',
@@ -93,6 +95,8 @@ module.exports = function(grunt){
 
 						'assets/js/buildWidget/buildCheckboxes.js',
 						
+						'assets/js/buildWidget/updateData.js',
+						'assets/js/buildWidget/updateView.js',
 						'assets/js/buildWidget/updateNumbers.js',
 						'assets/js/index.js',
 						'assets/concat/script-close.txt',

@@ -22,7 +22,7 @@
   position: relative;
 }
 .outer-wrapper .key .breakdown {
-  margin-left: 17px;
+  padding-left: 17px;
 }
 .outer-wrapper .key .breakdown li:before {
   content: "";

@@ -1,10 +1,10 @@
 function buildParams () {
 	var params = {};
 
-	params.colour =  [	"#f26621", /* mammals */
-						"#66c7c3", /* birds */
-						"#677a94" /* amphibians */
-					];
+	params.colour =  {	MAMMALIA: "#f26621",
+						AVES: "#66c7c3",
+						AMPHIBIA: "#677a94"
+					};
 
 	params.uiColour = {
 		veryLightGrey: "#ddd",

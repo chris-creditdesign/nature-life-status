@@ -23,7 +23,7 @@
   position: relative;
 }
 .outer-wrapper .key .breakdown {
-  margin-left: 17px;
+  padding-left: 17px;
 }
 .outer-wrapper .key .breakdown li:before {
   content: "";
@@ -220,10 +220,10 @@ function splitAndCapitalise(string) {
 function buildParams () {
 	var params = {};
 
-	params.colour =  [	"#f26621", /* mammals */
-						"#66c7c3", /* birds */
-						"#677a94" /* amphibians */
-					];
+	params.colour =  {	MAMMALIA: "#f26621",
+						AVES: "#66c7c3",
+						AMPHIBIA: "#677a94"
+					};
 
 	params.uiColour = {
 		veryLightGrey: "#ddd",
@@ -318,6 +318,8 @@ function buildData (data) {
 
 	return {
 		data: updatedData,
+		activeData: [],
+		selectedStates: [],
 		status: statesArray,
 		totals: totals
 	};
@@ -367,38 +369,11 @@ BuildWidget.prototype.drawCircle = function(colour, x, y) {
 };
 
 BuildWidget.prototype.fillCanvas = function() {
-	var selectedStates = [];
-
-	var checkboxesState = jQuery('.outer-wrapper .options input:checked');
-
-	for (var i = 0; i < checkboxesState.length; i++) {
-		selectedStates.push(checkboxesState.eq(i).val());
-	};
 
 	this.context.clearRect(0, 0, this.params.width, this.params.height);
 
-	for (var i = 0; i < this.data.data.length; i++ ) {
-		var colour = "#ddd";
-
-		if ( selectedStates.indexOf(this.data.data[i].status) !== -1 ) {
-			// Should be a proper scale
-			switch (this.data.data[i].class) {
-				case "MAMMALIA":
-					colour = this.params.colour[0];
-					break;
-				case "AVES":
-					colour = this.params.colour[1];
-					break;
-				case "AMPHIBIA":
-					colour = this.params.colour[2];
-					break;
-				case "INSECTA":
-					colour = this.params.colour[3];
-					break;
-				default:
-					colour = "#ddd";
-			}
-		}
+	for (var i = 0; i < this.data.activeData.length; i++ ) {
+		var	colour = this.params.colour[this.data.activeData[i].class];
 
 		var x = i % this.params.numPerLine;
 		var y = Math.floor( i / this.params.numPerLine );
@@ -415,11 +390,11 @@ BuildWidget.prototype.buildSVG = function(target) {
 
 };
 
-BuildWidget.prototype.drawRects = function() {
+BuildWidget.prototype.enterRects = function() {
 	var self = this;
 
-	this.rects = this.svg.selectAll("rect")
-		.data(this.data.data)
+	this.svg.selectAll("rect")
+		.data(this.data.activeData)
 		.enter()
 		.append("rect")
 		.attr("x", function(d,i) {
@@ -430,13 +405,43 @@ BuildWidget.prototype.drawRects = function() {
 			})
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
+		.attr("fill", function (d) {
+			return self.params.colour[d.class];
+		})
 		.style("opacity", 0);
 };
 
+BuildWidget.prototype.updateRects = function() {
+	var self = this;
+
+	this.svg.selectAll("rect")
+		.data(this.data.activeData)
+		.attr("x", function(d,i) {
+				return self.xScale(i);
+			})
+		.attr("y", function(d,i) {
+				return self.yScale(i);
+			})
+		.attr("width", this.params.rectWidth)
+		.attr("height", this.params.rectWidth)
+		.attr("fill", function (d) {
+			return self.params.colour[d.class];
+		})
+		.style("opacity", 0);
+};
+
+BuildWidget.prototype.exitRects = function() {
+	var self = this;
+
+	this.svg.selectAll("rect")
+		.data(this.data.activeData)
+		.exit()
+		.remove();
+};
 BuildWidget.prototype.buildTooltip = function() {
 	var self = this;
 
-	this.rects
+	this.svg.selectAll("rect")
 		.on("mouseover", function (d) {
 			var myRect = d3.select(this);
 
@@ -464,7 +469,6 @@ BuildWidget.prototype.buildTooltip = function() {
 					.classed("right", false)
 					.classed("hidden", false);
 			}
-
 			
 			d3.select("#name").html(d.name);
 			d3.select("#status").html(d.statusText);
@@ -495,6 +499,34 @@ BuildWidget.prototype.buildCheckboxes = function (target) {
 
 			return innerHTML;
 		});
+};
+
+BuildWidget.prototype.updateData = function() {
+		var checkboxesState = jQuery('.outer-wrapper .options input:checked');
+
+		/* First remove the existing data from the arrays */		
+		while ( this.data.selectedStates.length > 0 ) {
+			this.data.selectedStates.shift();
+		}
+
+		while (this.data.activeData.length > 0) {
+			this.data.activeData.shift();
+		}
+
+		/* Get the values of all of the selected checkboxes */
+		for (var i = 0; i < checkboxesState.length; i++) {
+			this.data.selectedStates.push(checkboxesState.eq(i).val());
+		};
+
+		for (var i = 0; i < this.data.data.length; i++) {
+			if ( this.data.selectedStates.indexOf(this.data.data[i].status) !== -1 ) {
+				this.data.activeData.push(this.data.data[i]);
+			}
+		};
+};
+
+BuildWidget.prototype.updateView = function() {
+	// body...
 };
 
 BuildWidget.prototype.updateNumbers = function() {
@@ -556,27 +588,30 @@ BuildWidget.prototype.updateNumbers = function() {
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				
 				lfStGraphic.buildCheckboxes("#states");
+				lfStGraphic.updateData();
 
 				lfStGraphic.buildScales();
 				lfStGraphic.resizeContainer("#life-status-chart");
 				lfStGraphic.buildCanvas("#canvas-chart");
 				lfStGraphic.fillCanvas();
 
-				lfStGraphic.buildSVG("#svg-chart");
-				lfStGraphic.drawRects();
-
 				/* Don't show the hover on mobile */
 				if ($('.outer-wrapper').width() > 600 ) {
+					lfStGraphic.buildSVG("#svg-chart");
+					lfStGraphic.enterRects();
 					lfStGraphic.buildTooltip();
 				}
 
 				lfStGraphic.updateNumbers();
 
-				// TO DO ADD LEFT RIGHT to tool tips
-				// $("li").eq(300).position().left;
-
 				$(".outer-wrapper .options input").change(function () {
+					lfStGraphic.updateData();
+
 					lfStGraphic.fillCanvas();
+					lfStGraphic.enterRects();
+					lfStGraphic.updateRects();
+					lfStGraphic.exitRects();
+					lfStGraphic.buildTooltip();
 					lfStGraphic.updateNumbers();
 				});
 
