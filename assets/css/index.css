@@ -19,12 +19,20 @@
 }
 .outer-wrapper .key li {
   list-style: none;
+  position: relative;
 }
 .outer-wrapper .key .breakdown {
   margin-left: 17px;
 }
-.outer-wrapper .key .breakdown li {
-  list-style: disc;
+.outer-wrapper .key .breakdown li:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: -16px;
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  opacity: 1;
 }
 .outer-wrapper .key .number {
   font-weight: bold;
@@ -33,16 +41,28 @@
   font-size: 0.8em;
   color: #666666;
 }
-.outer-wrapper .key .mammals {
+.outer-wrapper .key .mammals:before {
+  background-color: #ef6930;
+}
+.outer-wrapper .key .mammals .number {
   color: #ef6930;
 }
-.outer-wrapper .key .birds {
+.outer-wrapper .key .birds:before {
+  background-color: #9db58f;
+}
+.outer-wrapper .key .birds .number {
   color: #9db58f;
 }
-.outer-wrapper .key .amphibians {
+.outer-wrapper .key .amphibians:before {
+  background-color: #687a94;
+}
+.outer-wrapper .key .amphibians .number {
   color: #687a94;
 }
-.outer-wrapper .key .insects {
+.outer-wrapper .key .insects:before {
+  background-color: #e5ae5a;
+}
+.outer-wrapper .key .insects .number {
   color: #e5ae5a;
 }
 .outer-wrapper .chart {
@@ -100,10 +120,7 @@
   pointer-events: none;
 }
 .outer-wrapper .options {
-  -webkit-transition: opacity 0.4s ease;
-  transition: opacity 0.4s ease;
   padding: 10px 0 0 0;
-  overflow: hidden;
 }
 .outer-wrapper .options ul {
   overflow: visible;
