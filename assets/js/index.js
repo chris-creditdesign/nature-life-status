@@ -31,10 +31,14 @@
 					lfStGraphic.updateData();
 
 					lfStGraphic.fillCanvas();
-					lfStGraphic.enterRects();
-					lfStGraphic.updateRects();
-					lfStGraphic.exitRects();
-					lfStGraphic.buildTooltip();
+					
+					if ($('.outer-wrapper').width() > 600 ) {
+						lfStGraphic.enterRects();
+						lfStGraphic.updateRects();
+						lfStGraphic.exitRects();
+						lfStGraphic.buildTooltip();
+					}
+
 					lfStGraphic.updateNumbers();
 				});
 
