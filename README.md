@@ -2,7 +2,7 @@
 
 Infographic for @naturenews build with [d3.js](http://d3js.org/).
 
-Published at [bit.ly/lifeunderthreat ](bit.ly/lifeunderthreat )
+Published at [http://www.nature.com/news/biodiversity-life-a-status-report-1.16523](http://www.nature.com/news/biodiversity-life-a-status-report-1.16523)
 
 ### Build process
 
