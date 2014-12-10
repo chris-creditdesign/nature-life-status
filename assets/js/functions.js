@@ -23,9 +23,7 @@ function splitAndCapitalise(string) {
 
 	var myString = string.split('_');
 	
-	for (var y = 0; y < myString.length; y++) {
-		myString[y] = capitaliseFirstLetter(myString[y]);
-	}
+	myString[0] = capitaliseFirstLetter(myString[0]);
 
 	myString = myString.join(" ");
 

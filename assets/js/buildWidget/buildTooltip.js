@@ -31,7 +31,7 @@ BuildWidget.prototype.buildTooltip = function() {
 			}
 			
 			d3.select("#name").html(d.name);
-			d3.select("#genus").html(d.genus);
+			d3.select("#genus").html(d.genus + " " + d.species);
 			d3.select("#status").html(d.statusText);
 
 		}).on("mouseout", function () {

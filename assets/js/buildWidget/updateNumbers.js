@@ -11,7 +11,7 @@ BuildWidget.prototype.updateNumbers = function() {
 		amphibians += this.data.totals.amphibiansCR;
 	}
 
-	if ( this.data.selectedStates.indexOf("vunerable") !== -1 ) {
+	if ( this.data.selectedStates.indexOf("vulnerable") !== -1 ) {
 		total += (this.data.totals.mammalsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
 		mammals += this.data.totals.mammalsV;
 		birds += this.data.totals.birdsV;

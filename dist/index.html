@@ -168,18 +168,18 @@
 
 </style>
 <div class="outer-wrapper">
-	<h2>INTERACTIVE: The Risk List</h2>
-	<p>There are 4,529 species of mammals, birds, and amphibians deemed at risk of extinction on the International Union for Conservation of Nature's <a href="http://www.iucnredlist.org/">Red List</a>. To put that number into perspective, mouse over the dots below to pull up the names of individual species.</p>
+	<h2>INTERACTIVE: The risk list</h2>
+	<p>There are 4,529 species of mammal, bird, and amphibian deemed at risk of extinction on the International Union for Conservation of Nature's <a href="http://www.iucnredlist.org/">Red List</a>. To put that number into perspective, move your mouse over the dots below to pull up details of individual species.</p>
 	
 	<form class="options" id="states"></form>
 
 	<h3>Displaying: </h3>
 	<ul class="key">
-		<li>Total: <span id="total-number" class="number"></span> <span class="list-unit">THREATENED MAMMALS, BIRDS, AMPHIBIANS AND INSECTS</span></li>
+		<li>Total: <span id="total-number" class="number"></span> <span class="list-unit">THREATENED MAMMALS, BIRDS AND AMPHIBIANS</span></li>
 		<ul class="breakdown">
-			<li class="mammals">Mammals: <span id="mammals-number" class="mammals number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
-			<li class="birds">Birds: <span id="birds-number" class="birds number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
-			<li class="amphibians">Amphibians: <span id="amphibians-number" class="amphibians number"></span> <span class="list-unit">THREATENED SPECIES</span></li>
+			<li class="mammals">Mammals: <span id="mammals-number" class="mammals number"></span> <span class="list-unit">SPECIES</span></li>
+			<li class="birds">Birds: <span id="birds-number" class="birds number"></span> <span class="list-unit">SPECIES</span></li>
+			<li class="amphibians">Amphibians: <span id="amphibians-number" class="amphibians number"></span> <span class="list-unit">SPECIES</span></li>
 		</ul>
 	</ul>
 
@@ -220,9 +220,7 @@ function splitAndCapitalise(string) {
 
 	var myString = string.split('_');
 	
-	for (var y = 0; y < myString.length; y++) {
-		myString[y] = capitaliseFirstLetter(myString[y]);
-	}
+	myString[0] = capitaliseFirstLetter(myString[0]);
 
 	myString = myString.join(" ");
 
@@ -284,6 +282,12 @@ function buildData (data) {
 
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
+			myObject.species = capitaliseFirstLetter(data[i].species);
+
+			if (myObject.status === "vunerable") {
+				myObject.status = "vulnerable";
+			}
+
 			myObject.genus = data[i].genus;
 
 			myObject.statusText = splitAndCapitalise(myObject.status);
@@ -299,14 +303,14 @@ function buildData (data) {
 			myObject.name = myObject.names.split(',')[0].split('|')[0];
 			myObject.name = capitaliseFirstLetter(myObject.name);
 
-			if (statesArray.indexOf(data[i].status) === -1) {
-				statesArray.push(data[i].status);
+			if (statesArray.indexOf(myObject.status) === -1) {
+				statesArray.push(myObject.status);
 			}
 
 			if ( myObject.class === "MAMMALIA" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.mammalsCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.mammalsV;
 				} else if ( myObject.status === "endangered") {
 					++totals.mammalsE;
@@ -317,7 +321,7 @@ function buildData (data) {
 			} else if ( myObject.class === "AVES" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.birdsCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.birdsV;
 				} else if ( myObject.status === "endangered") {
 					++totals.birdsE;
@@ -328,7 +332,7 @@ function buildData (data) {
 			} else if ( myObject.class === "AMPHIBIA" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.amphibiansCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.amphibiansV;
 				} else if ( myObject.status === "endangered") {
 					++totals.amphibiansE;
@@ -498,7 +502,7 @@ BuildWidget.prototype.buildTooltip = function() {
 			}
 			
 			d3.select("#name").html(d.name);
-			d3.select("#genus").html(d.genus);
+			d3.select("#genus").html(d.genus + " " + d.species);
 			d3.select("#status").html(d.statusText);
 
 		}).on("mouseout", function () {
@@ -566,7 +570,7 @@ BuildWidget.prototype.updateNumbers = function() {
 		amphibians += this.data.totals.amphibiansCR;
 	}
 
-	if ( this.data.selectedStates.indexOf("vunerable") !== -1 ) {
+	if ( this.data.selectedStates.indexOf("vulnerable") !== -1 ) {
 		total += (this.data.totals.mammalsV + this.data.totals.birdsV + this.data.totals.amphibiansV);
 		mammals += this.data.totals.mammalsV;
 		birds += this.data.totals.birdsV;

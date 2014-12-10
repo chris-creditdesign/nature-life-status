@@ -25,6 +25,12 @@ function buildData (data) {
 
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
+			myObject.species = capitaliseFirstLetter(data[i].species);
+
+			if (myObject.status === "vunerable") {
+				myObject.status = "vulnerable";
+			}
+
 			myObject.genus = data[i].genus;
 
 			myObject.statusText = splitAndCapitalise(myObject.status);
@@ -40,14 +46,14 @@ function buildData (data) {
 			myObject.name = myObject.names.split(',')[0].split('|')[0];
 			myObject.name = capitaliseFirstLetter(myObject.name);
 
-			if (statesArray.indexOf(data[i].status) === -1) {
-				statesArray.push(data[i].status);
+			if (statesArray.indexOf(myObject.status) === -1) {
+				statesArray.push(myObject.status);
 			}
 
 			if ( myObject.class === "MAMMALIA" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.mammalsCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.mammalsV;
 				} else if ( myObject.status === "endangered") {
 					++totals.mammalsE;
@@ -58,7 +64,7 @@ function buildData (data) {
 			} else if ( myObject.class === "AVES" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.birdsCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.birdsV;
 				} else if ( myObject.status === "endangered") {
 					++totals.birdsE;
@@ -69,7 +75,7 @@ function buildData (data) {
 			} else if ( myObject.class === "AMPHIBIA" ) {
 				if (myObject.status === "critically_endangered") {
 					++totals.amphibiansCR;
-				} else if (myObject.status === "vunerable") {
+				} else if (myObject.status === "vulnerable") {
 					++totals.amphibiansV;
 				} else if ( myObject.status === "endangered") {
 					++totals.amphibiansE;
