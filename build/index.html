@@ -331,7 +331,7 @@ function buildData (data) {
 
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
-			myObject.species = capitaliseFirstLetter(data[i].species);
+			myObject.species = data[i].species;
 
 			if (myObject.status === "vunerable") {
 				myObject.status = "vulnerable";
