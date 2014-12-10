@@ -113,9 +113,14 @@ $amphibians:#677a94;
 		box-shadow: 2px 2px 5px $darkGrey;
 		line-height: 1.4em;
 		opacity: 1;
+		z-index: 99;
 
 		p {
 			padding: 0;
+		}
+
+		.genus {
+			font-style: italic;
 		}
 
 		span {

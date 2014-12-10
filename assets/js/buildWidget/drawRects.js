@@ -13,9 +13,7 @@ BuildWidget.prototype.enterRects = function() {
 			})
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
-		.attr("fill", function (d) {
-			return self.params.colour[d.class];
-		})
+		.attr("fill", "#fff")
 		.style("opacity", 0);
 };
 
@@ -32,9 +30,6 @@ BuildWidget.prototype.updateRects = function() {
 			})
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
-		.attr("fill", function (d) {
-			return self.params.colour[d.class];
-		})
 		.style("opacity", 0);
 };
 

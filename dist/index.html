@@ -80,9 +80,13 @@
   box-shadow: 2px 2px 5px #333333;
   line-height: 1.4em;
   opacity: 1;
+  z-index: 99;
 }
 .outer-wrapper .widget-tooltip p {
   padding: 0;
+}
+.outer-wrapper .widget-tooltip .genus {
+  font-style: italic;
 }
 .outer-wrapper .widget-tooltip span {
   font-weight: bold;
@@ -164,7 +168,7 @@
 
 </style>
 <div class="outer-wrapper">
-	<h2>The Risk List</h2>
+	<h2>INTERACTIVE: The Risk List</h2>
 	<p>There are 4,529 species of mammals, birds, and amphibians deemed at risk of extinction on the International Union for Conservation of Nature's <a href="http://www.iucnredlist.org/">Red List</a>. To put that number into perspective, mouse over the dots below to pull up the names of individual species.</p>
 	
 	<form class="options" id="states"></form>
@@ -184,7 +188,7 @@
 		<div class="chart-container" id="svg-chart"></div>
 		<div class="widget-tooltip left hidden" id="widget-tooltip">
 			<p id="name"></p>
-			<p>Latin name</p>
+			<p id="genus" class="genus"></p>
 			<p id="status"></p>
 		</div>
 	</div>
@@ -280,6 +284,7 @@ function buildData (data) {
 
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
+			myObject.genus = data[i].genus;
 
 			myObject.statusText = splitAndCapitalise(myObject.status);
 
@@ -386,15 +391,16 @@ BuildWidget.prototype.buildCanvas = function(target) {
 	this.context = this.canvas.node().getContext("2d");
 };
 
-BuildWidget.prototype.drawCircle = function(colour, x, y) {
+BuildWidget.prototype.drawCircle = function(colour, x, y, radius) {
 	this.context.beginPath();
 	this.context.fillStyle = colour;  
-	this.context.arc((this.params.rectWidth/2) + (x * this.params.rectWidth), (this.params.rectWidth/2) + (y * this.params.rectWidth), this.params.rectWidth/2.3, 0, 2 * Math.PI, false);
+	this.context.arc((this.params.rectWidth/2) + (x * this.params.rectWidth), (this.params.rectWidth/2) + (y * this.params.rectWidth), radius, 0, 2 * Math.PI, false);
 	this.context.fill();
 	this.context.closePath();
 };
 
 BuildWidget.prototype.fillCanvas = function() {
+	var fullRadius = this.params.rectWidth/2.3;
 
 	this.context.clearRect(0, 0, this.params.width, this.params.height);
 
@@ -403,8 +409,8 @@ BuildWidget.prototype.fillCanvas = function() {
 
 		var x = i % this.params.numPerLine;
 		var y = Math.floor( i / this.params.numPerLine );
-		this.drawCircle(colour,x,y);
-    }
+		this.drawCircle(colour,x,y,fullRadius);
+	}
 };
 
 BuildWidget.prototype.buildSVG = function(target) {
@@ -431,9 +437,7 @@ BuildWidget.prototype.enterRects = function() {
 			})
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
-		.attr("fill", function (d) {
-			return self.params.colour[d.class];
-		})
+		.attr("fill", "#fff")
 		.style("opacity", 0);
 };
 
@@ -450,9 +454,6 @@ BuildWidget.prototype.updateRects = function() {
 			})
 		.attr("width", this.params.rectWidth)
 		.attr("height", this.params.rectWidth)
-		.attr("fill", function (d) {
-			return self.params.colour[d.class];
-		})
 		.style("opacity", 0);
 };
 
@@ -497,6 +498,7 @@ BuildWidget.prototype.buildTooltip = function() {
 			}
 			
 			d3.select("#name").html(d.name);
+			d3.select("#genus").html(d.genus);
 			d3.select("#status").html(d.statusText);
 
 		}).on("mouseout", function () {
@@ -551,10 +553,6 @@ BuildWidget.prototype.updateData = function() {
 		};
 };
 
-BuildWidget.prototype.updateView = function() {
-	// body...
-};
-
 BuildWidget.prototype.updateNumbers = function() {
 	var total = 0;
 	var mammals = 0;
@@ -597,7 +595,6 @@ BuildWidget.prototype.updateNumbers = function() {
 			/*	jQuery ready */
 			$.when(
 				$.getScript("http://www.nature.com/polopoly_static/js/d3.v3.min.js"),
-				// $.getScript("data/threatened_species_data.js")
 				$.getScript("http://www.nature.com/widget_assets_polopoly/v516n7530/threatened_species_data.js")
 			).done(function () {
 

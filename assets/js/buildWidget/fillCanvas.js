@@ -1,4 +1,5 @@
 BuildWidget.prototype.fillCanvas = function() {
+	var fullRadius = this.params.rectWidth/2.3;
 
 	this.context.clearRect(0, 0, this.params.width, this.params.height);
 
@@ -7,6 +8,6 @@ BuildWidget.prototype.fillCanvas = function() {
 
 		var x = i % this.params.numPerLine;
 		var y = Math.floor( i / this.params.numPerLine );
-		this.drawCircle(colour,x,y);
-    }
+		this.drawCircle(colour,x,y,fullRadius);
+	}
 };

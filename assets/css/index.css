@@ -79,9 +79,13 @@
   box-shadow: 2px 2px 5px #333333;
   line-height: 1.4em;
   opacity: 1;
+  z-index: 99;
 }
 .outer-wrapper .widget-tooltip p {
   padding: 0;
+}
+.outer-wrapper .widget-tooltip .genus {
+  font-style: italic;
 }
 .outer-wrapper .widget-tooltip span {
   font-weight: bold;

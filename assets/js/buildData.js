@@ -25,6 +25,7 @@ function buildData (data) {
 
 			myObject.class = data[i].class;
 			myObject.status = data[i].status;
+			myObject.genus = data[i].genus;
 
 			myObject.statusText = splitAndCapitalise(myObject.status);
 
