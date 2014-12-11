@@ -243,7 +243,7 @@ function buildParams () {
 
 	params.width = jQuery('.html-widget').width() - 2;	
 
-	if (params.width === null) {
+	if (params.width === null || params.width > jQuery('#content').width()) {
 		params.width = jQuery('#content').width() - 2;
 	}
 
@@ -387,6 +387,7 @@ BuildWidget.prototype.resizeContainer = function(target) {
 	/* Resize container */
 	this.params.height = (this.params.rectWidth/1.5) + ((this.data.data.length/this.params.numPerLine) * this.params.rectWidth);
 	jQuery(target).css("height", Math.ceil(this.params.height) + "px");
+	jQuery(".outer-wrapper").css("width", (this.params.width + 2) + "px");
 };
 
 BuildWidget.prototype.buildCanvas = function(target) {

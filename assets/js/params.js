@@ -15,7 +15,7 @@ function buildParams () {
 
 	params.width = jQuery('.html-widget').width() - 2;	
 
-	if (params.width === null) {
+	if (params.width === null || params.width > jQuery('#content').width()) {
 		params.width = jQuery('#content').width() - 2;
 	}
 
