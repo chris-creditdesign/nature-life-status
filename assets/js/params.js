@@ -13,7 +13,11 @@ function buildParams () {
 		darkGrey: "#333"		
 	};
 
-	params.width = jQuery('#content').width() - 2;
+	params.width = jQuery('.html-widget').width() - 2;	
+
+	if (params.width === null) {
+		params.width = jQuery('#content').width() - 2;
+	}
 
 	/* Rectangel dimensions */
 	params.numPerLine = 50;
