@@ -114,7 +114,7 @@
   border-top: 8px solid transparent;
   opacity: 1;
 }
-.outer-wrapper .hidden {
+.outer-wrapper .tooltip-hidden {
   opacity: 0;
   pointer-events: none;
 }
@@ -186,7 +186,7 @@
 	<div class="chart" id="life-status-chart">
 		<div class="chart-container" id="canvas-chart"></div>
 		<div class="chart-container" id="svg-chart"></div>
-		<div class="widget-tooltip left hidden" id="widget-tooltip">
+		<div class="widget-tooltip left tooltip-hidden" id="widget-tooltip">
 			<p id="name"></p>
 			<p id="genus" class="genus"></p>
 			<p id="status"></p>
@@ -489,7 +489,7 @@ BuildWidget.prototype.buildTooltip = function() {
 					.style("left", left + "px")
 					.classed("left", false)
 					.classed("right", true)
-					.classed("hidden", false);
+					.classed("tooltip-hidden", false);
 			} else {
 				left += self.params.rectWidth;
 
@@ -498,7 +498,7 @@ BuildWidget.prototype.buildTooltip = function() {
 					.style("left", left + "px")
 					.classed("left", true)
 					.classed("right", false)
-					.classed("hidden", false);
+					.classed("tooltip-hidden", false);
 			}
 			
 			d3.select("#name").html(d.name);
@@ -511,7 +511,7 @@ BuildWidget.prototype.buildTooltip = function() {
 };
 
 BuildWidget.prototype.hideTooltip = function () {
-	d3.select("#widget-tooltip").classed("hidden", true);
+	d3.select("#widget-tooltip").classed("tooltip-hidden", true);
 };
 
 BuildWidget.prototype.buildCheckboxes = function (target) {

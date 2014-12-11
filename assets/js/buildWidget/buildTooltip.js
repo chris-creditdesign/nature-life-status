@@ -18,7 +18,7 @@ BuildWidget.prototype.buildTooltip = function() {
 					.style("left", left + "px")
 					.classed("left", false)
 					.classed("right", true)
-					.classed("hidden", false);
+					.classed("tooltip-hidden", false);
 			} else {
 				left += self.params.rectWidth;
 
@@ -27,7 +27,7 @@ BuildWidget.prototype.buildTooltip = function() {
 					.style("left", left + "px")
 					.classed("left", true)
 					.classed("right", false)
-					.classed("hidden", false);
+					.classed("tooltip-hidden", false);
 			}
 			
 			d3.select("#name").html(d.name);
@@ -40,5 +40,5 @@ BuildWidget.prototype.buildTooltip = function() {
 };
 
 BuildWidget.prototype.hideTooltip = function () {
-	d3.select("#widget-tooltip").classed("hidden", true);
+	d3.select("#widget-tooltip").classed("tooltip-hidden", true);
 };

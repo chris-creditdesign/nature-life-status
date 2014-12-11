@@ -113,7 +113,7 @@
   border-top: 8px solid transparent;
   opacity: 1;
 }
-.outer-wrapper .hidden {
+.outer-wrapper .tooltip-hidden {
   opacity: 0;
   pointer-events: none;
 }
