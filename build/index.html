@@ -296,6 +296,11 @@ function buildParams () {
 		params.width = jQuery('#content').width() - 2;
 	}
 
+	/* Set a minimum size */
+	if (params.width < 300 ) {
+		params.width = 300;
+	}
+
 	/* Rectangel dimensions */
 	params.numPerLine = 50;
 	params.rectWidth = params.width / params.numPerLine;
