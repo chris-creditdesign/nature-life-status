@@ -656,9 +656,10 @@ BuildWidget.prototype.updateNumbers = function() {
 		{
 			/*	jQuery ready */
 			$.when(
-				$.getScript("http://www.nature.com/polopoly_static/js/d3.v3.min.js"),
-				$.getScript("http://www.nature.com/widget_assets_polopoly/v516n7530/threatened_species_data.js")
+				$.getScript("//www.nature.com/polopoly_static/js/d3.v3.min.js"),
+				$.getScript("//www.nature.com/widget_assets_polopoly/v516n7530/threatened_species_data.js")
 			).done(function () {
+				console.log("Success!");
 
 				var lfStGraphic = new BuildWidget("#life-status-chart", buildParams(), buildData(data));
 				
